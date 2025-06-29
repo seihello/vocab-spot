@@ -1,3 +1,4 @@
+import { Word } from "@/lib/types";
 import { Client, PageObjectResponse } from "@notionhq/client";
 
 export async function getWords() {
@@ -11,7 +12,8 @@ export async function getWords() {
 
   const results = response.results as PageObjectResponse[];
 
-  const words = [];
+  const words: Word[] = [];
+
   results.forEach((result) => {
     const names = result.properties.Names;
     const meanings = result.properties.Meanings;
@@ -48,8 +50,9 @@ export async function getWords() {
         level: level.number,
         tags: tags.multi_select.map((tag) => tag.name),
       };
-      console.log("word", word);
+      words.push(word);
     }
   });
-  // console.log(response);
+  console.log(words);
+  return words;
 }
