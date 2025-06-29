@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic";
 
-import { getWords } from "@/notion/get-words";
+import { getWords } from "@/lib/notion/get-words";
 import Image from "next/image";
 import { use } from "react";
 
