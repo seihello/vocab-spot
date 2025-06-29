@@ -1,10 +1,10 @@
 export type Word = {
   id: string;
   names: string[];
-  meanings: string[];
-  sentences: string[];
-  collocations: string[];
-  pronunciations: string[];
+  meanings: string[] | null;
+  sentences: string[] | null;
+  collocations: string[] | null;
+  pronunciations: string[] | null;
+  tags: string[] | null;
   level: number | null;
-  tags: string[];
 };

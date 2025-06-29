@@ -32,23 +32,30 @@ export async function getWords() {
       level.type === "number" &&
       names.rich_text.length > 0
     ) {
+      const splitNames = names.rich_text.flatMap((name) => name.plain_text.split("\n")).filter((name) => name !== "");
+      const splitMeanings = meanings.rich_text
+        .flatMap((meaning) => meaning.plain_text.split("\n"))
+        .filter((meaning) => meaning !== "");
+      const splitSentences = sentences.rich_text
+        .flatMap((sentence) => sentence.plain_text.split("\n"))
+        .filter((sentence) => sentence !== "");
+      const splitCollocations = collocations.rich_text
+        .flatMap((collocation) => collocation.plain_text.split("\n"))
+        .filter((collocation) => collocation !== "");
+      const splitPronunciations = pronunciations.rich_text
+        .flatMap((pronunciation) => pronunciation.plain_text.split("\n"))
+        .filter((pronunciation) => pronunciation !== "");
+      const splitTags = tags.multi_select.map((tag) => tag.name);
+
       const word = {
         id: result.id,
-        names: names.rich_text.flatMap((name) => name.plain_text.split("\n")).filter((name) => name !== ""),
-        meanings: meanings.rich_text
-          .flatMap((meaning) => meaning.plain_text.split("\n"))
-          .filter((meaning) => meaning !== ""),
-        sentences: sentences.rich_text
-          .flatMap((sentence) => sentence.plain_text.split("\n"))
-          .filter((sentence) => sentence !== ""),
-        collocations: collocations.rich_text
-          .flatMap((collocation) => collocation.plain_text.split("\n"))
-          .filter((collocation) => collocation !== ""),
-        pronunciations: pronunciations.rich_text
-          .flatMap((pronunciation) => pronunciation.plain_text.split("\n"))
-          .filter((pronunciation) => pronunciation !== ""),
+        names: splitNames,
+        meanings: splitMeanings.length > 0 ? splitMeanings : null,
+        sentences: splitSentences.length > 0 ? splitSentences : null,
+        collocations: splitCollocations.length > 0 ? splitCollocations : null,
+        pronunciations: splitPronunciations.length > 0 ? splitPronunciations : null,
+        tags: splitTags.length > 0 ? splitTags : null,
         level: level.number,
-        tags: tags.multi_select.map((tag) => tag.name),
       };
       words.push(word);
     }
