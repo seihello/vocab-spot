@@ -2,13 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { syncWords } from "@/lib/sync-words";
+import { Word } from "@/lib/types";
+import { updateWords } from "@/lib/update-words";
 import { validatePasscode } from "@/lib/validate-passcode";
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const [passcode, setPasscode] = useState("");
   const [isPasscodePassed, setIsPasscodePassed] = useState(false);
+  const [words, setWords] = useState<Word[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -29,13 +31,23 @@ export default function Home() {
         <div className="fade-in flex gap-x-2 w-full">
           <Button
             onClick={async () => {
-              await syncWords(passcode);
+              const words = await updateWords(passcode);
+              setWords(words);
             }}
           >
             Sync Words
           </Button>
         </div>
       )}
+      <div className="space-y-4">
+        {words.map((word, index) => (
+          <div key={index} className="space-y-2 whitespace-pre-line">
+            <p>{word.names}</p>
+            <p>{word.meanings}</p>
+            <p>{word.sentences}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
