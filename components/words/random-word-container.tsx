@@ -37,7 +37,7 @@ export default function RandomWordContainer({ wordIds }: Props) {
   if (words.length <= 0) return;
 
   return (
-    <div className="flex flex-col sm:flex-row gap-x-16 items-center justify-center w-full m-auto pt-8 sm:pt-16 pb-4 px-2 sm:px-8 gap-y-2 min-h-screen sm:min-h-auto">
+    <div className="flex flex-col sm:flex-row gap-x-16 items-center justify-center w-full m-auto pt-8 sm:pt-16 pb-4 px-2 sm:px-8 gap-y-2 min-h-dvh sm:min-h-auto">
       <Button onClick={onClickPrev} className="order-1 sm:order-0">
         Prev
       </Button>
