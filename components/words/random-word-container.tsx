@@ -20,6 +20,12 @@ export default function RandomWordContainer({ wordIds }: Props) {
   };
 
   const onClickNext = useCallback(async () => {
+    if (isFetchingWord) return;
+    if (currentIndex + 1 < words.length) {
+      setCurrentIndex((prev) => prev + 1);
+      return;
+    }
+
     setIsFetchingWord(true);
 
     const randomId = wordIds[Math.floor(Math.random() * wordIds.length)];
@@ -28,21 +34,23 @@ export default function RandomWordContainer({ wordIds }: Props) {
     setCurrentIndex((prev) => prev + 1);
 
     setIsFetchingWord(false);
-  }, [wordIds]);
+  }, [currentIndex, isFetchingWord, wordIds, words.length]);
 
   useEffect(() => {
-    onClickNext();
-  }, [onClickNext]);
+    if (words.length === 0) {
+      onClickNext();
+    }
+  }, [words, onClickNext]);
 
   if (words.length <= 0) return;
 
   return (
     <div className="flex flex-col sm:flex-row gap-x-16 items-center justify-center w-full m-auto pt-8 sm:pt-16 pb-4 px-2 sm:px-8 gap-y-2 min-h-dvh sm:min-h-auto">
-      <Button onClick={onClickPrev} className="order-1 sm:order-0">
+      <Button onClick={onClickPrev} className="order-1 sm:order-0" disabled={currentIndex === 0}>
         Prev
       </Button>
       <RandomWord word={words[currentIndex]} />
-      <Button onClick={onClickNext} className="order-last">
+      <Button onClick={onClickNext} className="order-last" disabled={isFetchingWord}>
         Next
       </Button>
     </div>
