@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Word } from "@/lib/types";
-import { updateWords } from "@/lib/update-words";
 import { validatePasscode } from "@/lib/validate-passcode";
 import { useEffect, useState } from "react";
 
@@ -29,14 +28,7 @@ export default function Home() {
       <Input type="password" placeholder="Enter passcode" onChange={(e) => setPasscode(e.target.value)} />
       {isPasscodePassed && (
         <div className="fade-in flex gap-x-2 w-full">
-          <Button
-            onClick={async () => {
-              const words = await updateWords(passcode);
-              setWords(words);
-            }}
-          >
-            Sync Words
-          </Button>
+          <Button>No Action</Button>
         </div>
       )}
       <div className="space-y-4">
