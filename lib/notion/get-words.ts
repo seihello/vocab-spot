@@ -1,5 +1,15 @@
-import { Word } from "@/lib/types";
 import { Client, PageObjectResponse } from "@notionhq/client";
+
+type Word = {
+  id: string;
+  names: string;
+  meanings: string | null;
+  sentences: string | null;
+  collocations: string | null;
+  pronunciations: string | null;
+  tags: string | null;
+  level: number | null;
+};
 
 export async function getWords() {
   const notion = new Client({

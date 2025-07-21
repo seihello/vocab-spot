@@ -1,21 +1,10 @@
-export type ArrayedWord = {
-  id: string;
-  names: string[];
-  meanings: string[] | null;
-  sentences: string[] | null;
-  collocations: string[] | null;
-  pronunciations: string[] | null;
-  tags: string[] | null;
-  level: number | null;
-};
-
 export type Word = {
   id: string;
   names: string;
-  meanings: string | null;
-  sentences: string | null;
-  collocations: string | null;
-  pronunciations: string | null;
-  tags: string | null;
-  level: number | null;
+  meanings: string;
+  sentences: string;
+  collocations: string;
+  pronunciations: string;
+  level: number;
+  tags: string[]; // 配列にする
 };

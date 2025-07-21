@@ -1,23 +1,13 @@
 "use server";
 
+import { Word } from "@/lib/types";
 import csvParser from "csv-parser";
 import * as fs from "fs";
 import path from "path";
 
-type Row = {
-  id: string;
-  names: string;
-  meanings: string;
-  sentences: string;
-  collocations: string;
-  pronunciation: string;
-  level: number;
-  tags: string[]; // 配列にする
-};
-
-export async function getWords(): Promise<Row[]> {
+export async function getWords(): Promise<Word[]> {
   return new Promise((resolve, reject) => {
-    const results: Row[] = [];
+    const words: Word[] = [];
 
     fs.createReadStream(path.join(process.cwd(), "public/words.csv"))
       .pipe(
@@ -36,19 +26,19 @@ export async function getWords(): Promise<Row[]> {
               .filter(Boolean)
           : [];
 
-        const row: Row = {
-          id: results.length.toString(),
+        const word: Word = {
+          id: words.length.toString(),
           names: data.Names ?? "",
           meanings: data.Meanings ?? "",
           sentences: data.Sentences ?? "",
           collocations: data.Collocations ?? "",
-          pronunciation: data.Pronunciation ?? "",
+          pronunciations: data.Pronunciation ?? "",
           level: Number(data.Level),
           tags: tagsArray,
         };
-        results.push(row);
+        words.push(word);
       })
-      .on("end", () => resolve(results))
+      .on("end", () => resolve(words))
       .on("error", (err) => reject(err));
   });
 }
