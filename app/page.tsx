@@ -1,9 +1,9 @@
 export const dynamic = "force-dynamic";
 
-import { getArrayedWords } from "@/lib/notion/get-arrayed-words";
+import { getWords } from "@/lib/csv/get-words";
 import { use } from "react";
 export default function Home() {
-  const words = use(getArrayedWords());
+  const words = use(getWords());
 
   return (
     <div className="w-216 p-4 mx-auto bg-primary-100">
