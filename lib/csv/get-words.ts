@@ -20,7 +20,15 @@ export async function getWords(): Promise<Row[]> {
     const results: Row[] = [];
 
     fs.createReadStream(path.join(process.cwd(), WORDS_FILE_PATH))
-      .pipe(csvParser())
+      .pipe(
+        csvParser({
+          mapHeaders: ({ header }) =>
+            header
+              .trim()
+              .replace(/\uFEFF/g, "")
+              .replace(/^['"]|['"]$/g, ""),
+        })
+      )
       .on("data", (data) => {
         const tagsArray = data.Tags
           ? data.Tags.split("、")
