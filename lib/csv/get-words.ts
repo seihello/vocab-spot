@@ -1,6 +1,5 @@
 "use server";
 
-import { WORDS_FILE_PATH } from "@/constants";
 import csvParser from "csv-parser";
 import * as fs from "fs";
 import path from "path";
@@ -19,7 +18,7 @@ export async function getWords(): Promise<Row[]> {
   return new Promise((resolve, reject) => {
     const results: Row[] = [];
 
-    fs.createReadStream(path.join(process.cwd(), WORDS_FILE_PATH))
+    fs.createReadStream(path.join(process.cwd(), "public/words.csv"))
       .pipe(
         csvParser({
           mapHeaders: ({ header }) =>
