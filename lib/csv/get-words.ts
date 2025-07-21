@@ -5,6 +5,7 @@ import * as fs from "fs";
 import path from "path";
 
 type Row = {
+  id: string;
   names: string;
   meanings: string;
   sentences: string;
@@ -36,6 +37,7 @@ export async function getWords(): Promise<Row[]> {
           : [];
 
         const row: Row = {
+          id: results.length.toString(),
           names: data.Names ?? "",
           meanings: data.Meanings ?? "",
           sentences: data.Sentences ?? "",
