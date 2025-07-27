@@ -67,20 +67,23 @@ export default function RandomWordContainer({ tags }: Props) {
     setWords([]);
   };
 
-  if (words.length <= 0 || currentIndex < 0) return;
+  const isReady = words.length > 0 && currentIndex >= 0;
 
   return (
     <div className="flex flex-col items-end justify-center w-full max-w-256 mx-auto pt-8 pb-4 px-2 sm:px-8 gap-y-2 min-h-dvh sm:min-h-auto">
-      <RandomWord word={words[currentIndex]} isDetailHidden={isDetailHidden} />
+      {isReady && <RandomWord word={words[currentIndex]} isDetailHidden={isDetailHidden} />}
       <div className="w-full sm:w-auto flex flex-col sm:flex-row gap-2 sm:-order-1 items-end sm:items-center">
         <Menu tagOptions={tags} defaultSelectedTags={selectedTags} onUpdate={onUpdateSelectedTags} />
-        <Button variant="outline" onClick={onClickShowAnswer} disabled={!isDetailHidden}>
+        <Button variant="outline" onClick={onClickShowAnswer} disabled={!isReady || !isDetailHidden}>
           Show Answer
         </Button>
-        <Button onClick={onClickPrev} disabled={currentIndex === 0}>
+        <Button onClick={onClickPrev} disabled={!isReady || currentIndex === 0}>
           Prev
         </Button>
-        <Button onClick={onClickNext} disabled={isFetchingWord || (currentIndex === words.length - 1 && isFinalWord)}>
+        <Button
+          onClick={onClickNext}
+          disabled={!isReady || isFetchingWord || (currentIndex === words.length - 1 && isFinalWord)}
+        >
           Next
         </Button>
       </div>
