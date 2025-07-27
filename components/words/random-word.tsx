@@ -18,7 +18,7 @@ export default function RandomWord({ word, isDetailHidden }: Props) {
             {word.tags.map((tag, index) => (
               <div
                 key={index}
-                className="rounded-full border shadow px-2 py-1 min-w-16 flex items-center justify-center"
+                className="bg-red-700 text-white text-xs rounded-full border shadow px-2 py-1 min-w-14 flex items-center justify-center"
               >
                 {tag}
               </div>
