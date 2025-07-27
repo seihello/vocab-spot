@@ -8,7 +8,7 @@ type Props = {
 
 export default function RandomWord({ word, isDetailHidden }: Props) {
   return (
-    <div className="space-y-2 whitespace-pre-line grow w-full">
+    <div className="space-y-2 whitespace-pre-line w-full">
       <div className="font-bold text-2xl text-primary-700">{word.names}</div>
       {!isDetailHidden && (
         <>

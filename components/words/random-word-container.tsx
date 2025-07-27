@@ -71,7 +71,9 @@ export default function RandomWordContainer({ tags }: Props) {
 
   return (
     <div className="flex flex-col items-end justify-center w-full max-w-256 mx-auto pt-8 pb-4 px-2 sm:px-8 gap-y-2 min-h-dvh sm:min-h-auto">
-      {isReady && <RandomWord word={words[currentIndex]} isDetailHidden={isDetailHidden} />}
+      <div className="w-full grow">
+        {isReady && <RandomWord word={words[currentIndex]} isDetailHidden={isDetailHidden} />}
+      </div>
       <div className="w-full sm:w-auto flex flex-col sm:flex-row gap-2 sm:-order-1 items-end sm:items-center">
         <Menu tagOptions={tags} defaultSelectedTags={selectedTags} onUpdate={onUpdateSelectedTags} />
         <Button variant="outline" onClick={onClickShowAnswer} disabled={!isReady || !isDetailHidden}>
