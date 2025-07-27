@@ -7,13 +7,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
 
 type Props = {
-  tags: string[];
+  tagOptions: string[];
+  defaultSelectedTags: string[];
   setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
-export default function Menu({ tags, setSelectedTags }: Props) {
+export default function Menu({ tagOptions, defaultSelectedTags, setSelectedTags }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedTagsTemp, setSelectedTagsTemp] = useState<string[]>([]);
+  const [selectedTagsTemp, setSelectedTagsTemp] = useState<string[]>(defaultSelectedTags);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -25,23 +26,24 @@ export default function Menu({ tags, setSelectedTags }: Props) {
         <div className="space-y-4">
           <h3 className="font-bold text-xl">Tags</h3>
           <div className="flex gap-2 flex-wrap">
-            {tags.map((tag, index) => (
+            {tagOptions.map((tagOption, index) => (
               <div key={index} className="flex items-center justify-center gap-x-1">
                 <Checkbox
-                  id={tag}
-                  name={tag}
+                  id={tagOption}
+                  name={tagOption}
+                  checked={selectedTagsTemp.includes(tagOption)}
                   onCheckedChange={(checked: CheckedState) =>
                     setSelectedTagsTemp((prev) => {
-                      if (checked === true && !prev.includes(tag)) {
-                        return [...prev, tag];
-                      } else if (checked === false && prev.includes(tag)) {
-                        return prev.filter((prevTag) => prevTag !== tag);
+                      if (checked === true && !prev.includes(tagOption)) {
+                        return [...prev, tagOption];
+                      } else if (checked === false && prev.includes(tagOption)) {
+                        return prev.filter((prevTag) => prevTag !== tagOption);
                       }
                       return prev;
                     })
                   }
                 />
-                <Label htmlFor={tag}>{tag}</Label>
+                <Label htmlFor={tagOption}>{tagOption}</Label>
               </div>
             ))}
           </div>
