@@ -26,8 +26,6 @@ export async function getWords(): Promise<Word[]> {
               .filter(Boolean)
           : [];
 
-        console.log("tagsArray", tagsArray);
-
         const word: Word = {
           id: words.length.toString(),
           names: data.Names ?? "",

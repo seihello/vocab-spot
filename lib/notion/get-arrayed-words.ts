@@ -78,6 +78,6 @@ export async function getArrayedWords() {
     hasMore = response.has_more;
     startCursor = response.next_cursor ?? undefined;
   }
-  // console.log(words);
+
   return words;
 }

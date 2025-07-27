@@ -67,6 +67,6 @@ export async function getWords() {
       words.push(word);
     }
   });
-  console.log(words);
+
   return words;
 }
