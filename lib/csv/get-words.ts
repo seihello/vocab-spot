@@ -21,10 +21,12 @@ export async function getWords(): Promise<Word[]> {
       )
       .on("data", (data) => {
         const tagsArray = data.Tags
-          ? data.Tags.split("、")
+          ? data.Tags.split(", ")
               .map((t: string) => t.trim())
               .filter(Boolean)
           : [];
+
+        console.log("tagsArray", tagsArray);
 
         const word: Word = {
           id: words.length.toString(),

@@ -4,7 +4,6 @@ import Menu from "@/components/menu";
 import { Button } from "@/components/ui/button";
 import RandomWord from "@/components/words/random-word";
 import { getRandomWord } from "@/lib/csv/get-random-word";
-import { getWordById } from "@/lib/csv/get-word-by-id";
 import { Word } from "@/lib/types";
 import React, { useCallback, useEffect, useState } from "react";
 
@@ -44,7 +43,7 @@ export default function RandomWordContainer({ tags }: Props) {
     setCurrentIndex((prev) => prev + 1);
 
     setIsFetchingWord(false);
-  }, [currentIndex, isFetchingWord, words.length]);
+  }, [currentIndex, isFetchingWord, words]);
 
   useEffect(() => {
     if (words.length === 0) {
@@ -54,11 +53,13 @@ export default function RandomWordContainer({ tags }: Props) {
 
   if (words.length <= 0) return;
 
+  console.log(tags);
+
   return (
     <div className="flex flex-col items-end justify-center w-full max-w-256 mx-auto pt-8 pb-4 px-2 sm:px-8 gap-y-2 min-h-dvh sm:min-h-auto">
       <RandomWord word={words[currentIndex]} isDetailHidden={isDetailHidden} />
-      <div className="w-full sm:w-auto flex flex-col sm:flex-row gap-2 sm:-order-1 items-end">
-        <Menu />
+      <div className="w-full sm:w-auto flex flex-col sm:flex-row gap-2 sm:-order-1 items-end sm:items-center">
+        <Menu tags={tags} />
         <Button variant="outline" onClick={onClickShowAnswer} disabled={!isDetailHidden}>
           Show Answer
         </Button>
