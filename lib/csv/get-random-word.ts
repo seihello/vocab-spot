@@ -1,3 +1,5 @@
+"use server";
+
 import { getWords } from "@/lib/csv/get-words";
 import { Word } from "@/lib/types";
 

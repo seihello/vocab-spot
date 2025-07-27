@@ -67,11 +67,6 @@ export default function RandomWordContainer({ tags }: Props) {
     setWords([]);
   };
 
-  console.log("words[currentIndex]}", words[currentIndex]);
-
-  console.log("words", words);
-  console.log("currentIndex", currentIndex);
-
   if (words.length <= 0 || currentIndex < 0) return;
 
   return (
