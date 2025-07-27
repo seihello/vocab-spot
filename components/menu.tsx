@@ -9,10 +9,10 @@ import { CheckedState } from "@radix-ui/react-checkbox";
 type Props = {
   tagOptions: string[];
   defaultSelectedTags: string[];
-  setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
+  onUpdate: (selectedTags: string[]) => void;
 };
 
-export default function Menu({ tagOptions, defaultSelectedTags, setSelectedTags }: Props) {
+export default function Menu({ tagOptions, defaultSelectedTags, onUpdate }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTagsTemp, setSelectedTagsTemp] = useState<string[]>(defaultSelectedTags);
 
@@ -51,7 +51,7 @@ export default function Menu({ tagOptions, defaultSelectedTags, setSelectedTags 
         <Button
           onClick={() => {
             setIsOpen(false);
-            setSelectedTags(selectedTagsTemp);
+            onUpdate(selectedTagsTemp);
           }}
         >
           OK

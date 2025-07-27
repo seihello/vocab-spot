@@ -14,6 +14,16 @@ export default function RandomWord({ word, isDetailHidden }: Props) {
         <>
           <div className="text-gray-500">{word.meanings}</div>
           <div>{word.sentences}</div>
+          <div className="flex flex-wrap gap-1">
+            {word.tags.map((tag, index) => (
+              <div
+                key={index}
+                className="rounded-full border shadow px-2 py-1 min-w-16 flex items-center justify-center"
+              >
+                {tag}
+              </div>
+            ))}
+          </div>
         </>
       )}
     </div>

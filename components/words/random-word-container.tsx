@@ -17,6 +17,7 @@ export default function RandomWordContainer({ tags }: Props) {
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [isFetchingWord, setIsFetchingWord] = useState(false);
   const [isDetailHidden, setIsDetailHidden] = useState(true);
+  const [isFinalWord, setIsFinalWord] = useState(false);
 
   const onClickShowAnswer = () => {
     setIsDetailHidden(false);
@@ -28,6 +29,8 @@ export default function RandomWordContainer({ tags }: Props) {
   };
 
   const onClickNext = useCallback(async () => {
+    console.log("onClickNext");
+
     if (isFetchingWord) return;
     if (currentIndex + 1 < words.length) {
       setIsDetailHidden(true);
@@ -37,14 +40,18 @@ export default function RandomWordContainer({ tags }: Props) {
 
     setIsFetchingWord(true);
 
-    const word = await getRandomWord(words.map((word) => word.id));
+    const word = await getRandomWord({ tags: selectedTags, excludeIds: words.map((word) => word.id) });
 
-    setWords((prev) => [...prev, word]);
-    setIsDetailHidden(true);
-    setCurrentIndex((prev) => prev + 1);
+    if (word) {
+      setWords((prev) => [...prev, word]);
+      setIsDetailHidden(true);
+      setCurrentIndex((prev) => prev + 1);
+    } else {
+      setIsFinalWord(true);
+    }
 
     setIsFetchingWord(false);
-  }, [currentIndex, isFetchingWord, words]);
+  }, [currentIndex, isFetchingWord, selectedTags, words]);
 
   useEffect(() => {
     if (words.length === 0) {
@@ -52,22 +59,33 @@ export default function RandomWordContainer({ tags }: Props) {
     }
   }, [words, onClickNext]);
 
-  if (words.length <= 0) return;
+  const onUpdateSelectedTags = (selectedTags: string[]) => {
+    setSelectedTags(selectedTags);
+    setCurrentIndex(-1);
+    setIsFinalWord(false);
+    setIsDetailHidden(false);
+    setWords([]);
+  };
 
-  console.log("selected tags", selectedTags);
+  console.log("words[currentIndex]}", words[currentIndex]);
+
+  console.log("words", words);
+  console.log("currentIndex", currentIndex);
+
+  if (words.length <= 0 || currentIndex < 0) return;
 
   return (
     <div className="flex flex-col items-end justify-center w-full max-w-256 mx-auto pt-8 pb-4 px-2 sm:px-8 gap-y-2 min-h-dvh sm:min-h-auto">
       <RandomWord word={words[currentIndex]} isDetailHidden={isDetailHidden} />
       <div className="w-full sm:w-auto flex flex-col sm:flex-row gap-2 sm:-order-1 items-end sm:items-center">
-        <Menu tagOptions={tags} defaultSelectedTags={selectedTags} setSelectedTags={setSelectedTags} />
+        <Menu tagOptions={tags} defaultSelectedTags={selectedTags} onUpdate={onUpdateSelectedTags} />
         <Button variant="outline" onClick={onClickShowAnswer} disabled={!isDetailHidden}>
           Show Answer
         </Button>
         <Button onClick={onClickPrev} disabled={currentIndex === 0}>
           Prev
         </Button>
-        <Button onClick={onClickNext} disabled={isFetchingWord}>
+        <Button onClick={onClickNext} disabled={isFetchingWord || (currentIndex === words.length - 1 && isFinalWord)}>
           Next
         </Button>
       </div>
