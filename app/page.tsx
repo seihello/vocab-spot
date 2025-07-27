@@ -1,10 +1,10 @@
 export const dynamic = "force-dynamic";
 
 import RandomWordContainer from "@/components/words/random-word-container";
-import { getIds } from "@/lib/csv/get-ids";
+import { getTags } from "@/lib/csv/get-tags";
 import { use } from "react";
 export default function Page() {
-  const wordIds = use(getIds());
+  const tags = use(getTags());
 
-  return <RandomWordContainer wordIds={wordIds} />;
+  return <RandomWordContainer tags={tags} />;
 }

@@ -1,16 +1,18 @@
 "use client";
 
+import Menu from "@/components/menu";
 import { Button } from "@/components/ui/button";
 import RandomWord from "@/components/words/random-word";
+import { getRandomWord } from "@/lib/csv/get-random-word";
 import { getWordById } from "@/lib/csv/get-word-by-id";
 import { Word } from "@/lib/types";
 import React, { useCallback, useEffect, useState } from "react";
 
 type Props = {
-  wordIds: string[];
+  tags: string[];
 };
 
-export default function RandomWordContainer({ wordIds }: Props) {
+export default function RandomWordContainer({ tags }: Props) {
   const [words, setWords] = useState<Word[]>([]);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [isFetchingWord, setIsFetchingWord] = useState(false);
@@ -35,14 +37,14 @@ export default function RandomWordContainer({ wordIds }: Props) {
 
     setIsFetchingWord(true);
 
-    const randomId = wordIds[Math.floor(Math.random() * wordIds.length)];
-    const word = await getWordById(randomId);
+    const word = await getRandomWord(words.map((word) => word.id));
+
     setWords((prev) => [...prev, word]);
     setIsDetailHidden(true);
     setCurrentIndex((prev) => prev + 1);
 
     setIsFetchingWord(false);
-  }, [currentIndex, isFetchingWord, wordIds, words.length]);
+  }, [currentIndex, isFetchingWord, words.length]);
 
   useEffect(() => {
     if (words.length === 0) {
@@ -55,7 +57,8 @@ export default function RandomWordContainer({ wordIds }: Props) {
   return (
     <div className="flex flex-col items-end justify-center w-full max-w-256 mx-auto pt-8 pb-4 px-2 sm:px-8 gap-y-2 min-h-dvh sm:min-h-auto">
       <RandomWord word={words[currentIndex]} isDetailHidden={isDetailHidden} />
-      <div className="w-full sm:w-auto flex flex-col sm:flex-row gap-2 sm:-order-1">
+      <div className="w-full sm:w-auto flex flex-col sm:flex-row gap-2 sm:-order-1 items-end">
+        <Menu />
         <Button variant="outline" onClick={onClickShowAnswer} disabled={!isDetailHidden}>
           Show Answer
         </Button>
