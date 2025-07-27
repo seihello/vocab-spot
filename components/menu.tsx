@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { IconCategory } from "@tabler/icons-react";
 import { Label } from "@/components/ui/label";
@@ -15,6 +15,12 @@ type Props = {
 export default function Menu({ tagOptions, defaultSelectedTags, onUpdate }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTagsTemp, setSelectedTagsTemp] = useState<string[]>(defaultSelectedTags);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setSelectedTagsTemp(defaultSelectedTags);
+    }
+  }, [isOpen, defaultSelectedTags]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
