@@ -25,9 +25,9 @@ export default function Menu({ tagOptions, defaultSelectedTags, onUpdate }: Prop
         <DialogTitle className="hidden" />
         <div className="space-y-4">
           <h3 className="font-bold text-xl">Tags</h3>
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex gap-y-4 flex-wrap">
             {tagOptions.map((tagOption, index) => (
-              <div key={index} className="flex items-center justify-center gap-x-1">
+              <div key={index} className="flex items-center justify-center gap-x-2 w-1/3">
                 <Checkbox
                   id={tagOption}
                   name={tagOption}
@@ -42,8 +42,11 @@ export default function Menu({ tagOptions, defaultSelectedTags, onUpdate }: Prop
                       return prev;
                     })
                   }
+                  className=""
                 />
-                <Label htmlFor={tagOption}>{tagOption}</Label>
+                <Label htmlFor={tagOption} className="grow">
+                  {tagOption}
+                </Label>
               </div>
             ))}
           </div>
