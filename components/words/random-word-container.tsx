@@ -3,6 +3,7 @@
 import Menu from "@/components/menu";
 import { Button } from "@/components/ui/button";
 import RandomWord from "@/components/words/random-word";
+import { useDisplayMode } from "@/hooks/use-display-mode";
 import { getRandomWord } from "@/lib/csv/get-random-word";
 import { Word } from "@/lib/types";
 import React, { useCallback, useEffect, useState } from "react";
@@ -12,6 +13,8 @@ type Props = {
 };
 
 export default function RandomWordContainer({ tags }: Props) {
+  const { isPwa } = useDisplayMode();
+
   const [words, setWords] = useState<Word[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(-1);
@@ -70,7 +73,11 @@ export default function RandomWordContainer({ tags }: Props) {
   const isReady = words.length > 0 && currentIndex >= 0;
 
   return (
-    <div className="flex flex-col items-end justify-center w-full max-w-256 mx-auto pt-8 pb-4 px-2 sm:px-8 gap-y-2 min-h-dvh sm:min-h-auto">
+    <div
+      className={`flex flex-col items-end justify-center w-full max-w-256 mx-auto pt-8 px-2 sm:px-8 gap-y-2 min-h-dvh sm:min-h-auto ${
+        isPwa ? "pb-16" : "pb-4"
+      }`}
+    >
       <div className="w-full grow">
         {isReady && <RandomWord word={words[currentIndex]} isDetailHidden={isDetailHidden} />}
       </div>
