@@ -24,7 +24,7 @@ export default function RandomWordContainer({ tags }: Props) {
   const [isDetailHidden, setIsDetailHidden] = useState(true);
   const [isFinalWord, setIsFinalWord] = useState(false);
 
-  const { messages, status, append } = useChat();
+  const { messages, status, append, setMessages } = useChat();
 
   const onClickShowAnswer = () => {
     setIsDetailHidden(false);
@@ -32,6 +32,7 @@ export default function RandomWordContainer({ tags }: Props) {
 
   const onClickPrev = () => {
     setIsDetailHidden(true);
+    setMessages([]);
     setCurrentIndex((prev) => (prev > 0 ? prev - 1 : prev));
   };
 
@@ -39,6 +40,7 @@ export default function RandomWordContainer({ tags }: Props) {
     if (isFetchingWord) return;
     if (currentIndex + 1 < words.length) {
       setIsDetailHidden(true);
+      setMessages([]);
       setCurrentIndex((prev) => prev + 1);
       return;
     }
@@ -50,13 +52,14 @@ export default function RandomWordContainer({ tags }: Props) {
     if (word) {
       setWords((prev) => [...prev, word]);
       setIsDetailHidden(true);
+      setMessages([]);
       setCurrentIndex((prev) => prev + 1);
     } else {
       setIsFinalWord(true);
     }
 
     setIsFetchingWord(false);
-  }, [currentIndex, isFetchingWord, selectedTags, words]);
+  }, [currentIndex, isFetchingWord, selectedTags, words, setMessages]);
 
   useEffect(() => {
     if (words.length === 0) {
@@ -69,6 +72,7 @@ export default function RandomWordContainer({ tags }: Props) {
     setCurrentIndex(-1);
     setIsFinalWord(false);
     setIsDetailHidden(false);
+    setMessages([]);
     setWords([]);
   };
 
@@ -78,8 +82,6 @@ export default function RandomWordContainer({ tags }: Props) {
   };
 
   const isReady = words.length > 0 && currentIndex >= 0;
-
-  console.log("messages", messages);
 
   return (
     <div
