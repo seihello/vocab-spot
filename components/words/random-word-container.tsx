@@ -7,6 +7,8 @@ import { useDisplayMode } from "@/hooks/use-display-mode";
 import { getRandomWord } from "@/lib/csv/get-random-word";
 import { Word } from "@/lib/types";
 import React, { useCallback, useEffect, useState } from "react";
+import { useChat } from "@ai-sdk/react";
+// import { useCompletion } from "@ai-sdk/react";
 
 type Props = {
   tags: string[];
@@ -22,6 +24,8 @@ export default function RandomWordContainer({ tags }: Props) {
   const [isDetailHidden, setIsDetailHidden] = useState(true);
   const [isFinalWord, setIsFinalWord] = useState(false);
 
+  const { messages, status, append } = useChat();
+
   const onClickShowAnswer = () => {
     setIsDetailHidden(false);
   };
@@ -32,8 +36,6 @@ export default function RandomWordContainer({ tags }: Props) {
   };
 
   const onClickNext = useCallback(async () => {
-    console.log("onClickNext");
-
     if (isFetchingWord) return;
     if (currentIndex + 1 < words.length) {
       setIsDetailHidden(true);
@@ -70,7 +72,14 @@ export default function RandomWordContainer({ tags }: Props) {
     setWords([]);
   };
 
+  const onClickGenerateSentence = async () => {
+    const prompt = `Generate sentence(s) using the word(s) "${words[currentIndex].names}".`;
+    await append({ role: "user", content: prompt });
+  };
+
   const isReady = words.length > 0 && currentIndex >= 0;
+
+  console.log("messages", messages);
 
   return (
     <div
@@ -81,8 +90,24 @@ export default function RandomWordContainer({ tags }: Props) {
       <div className="w-full grow">
         {isReady && <RandomWord word={words[currentIndex]} isDetailHidden={isDetailHidden} />}
       </div>
+      <div>
+        {messages
+          .filter((message) => message.role === "assistant")
+          .map((message) => (
+            <div key={message.id}>
+              {message.parts
+                .filter((part) => part.type === "text")
+                .map((part, index) => (
+                  <span key={index}>{part.text}</span>
+                ))}
+            </div>
+          ))}
+      </div>
       <div className="w-full sm:w-auto flex flex-col sm:flex-row gap-2 sm:-order-1 items-end sm:items-center">
         <Menu tagOptions={tags} defaultSelectedTags={selectedTags} onUpdate={onUpdateSelectedTags} />
+        <Button variant="outline" onClick={onClickGenerateSentence} disabled={!isReady}>
+          Generate Sentence
+        </Button>
         <Button variant="outline" onClick={onClickShowAnswer} disabled={!isReady || !isDetailHidden}>
           Show Answer
         </Button>
