@@ -24,7 +24,7 @@ export default function RandomWordContainer({ tags }: Props) {
   const [isDetailHidden, setIsDetailHidden] = useState(true);
   const [isFinalWord, setIsFinalWord] = useState(false);
 
-  const { messages, status, append, setMessages } = useChat();
+  const { messages, append, setMessages } = useChat();
 
   const onClickShowAnswer = () => {
     setIsDetailHidden(false);
@@ -76,30 +76,33 @@ export default function RandomWordContainer({ tags }: Props) {
     setWords([]);
   };
 
-  const onClickGenerateSentence = async () => {
-    const prompt = `Generate sentence(s) using the word(s) "${words[currentIndex].names}".`;
+  const onClickGenerateExplanation = async () => {
+    const prompt = `"${words[currentIndex].names}"という英語の解説をしてください。単語である場合は、接頭辞や語根、接尾辞などの分析や語源の解説、効果的な意味の覚え方などを解説してください。熟語やイディオムである場合は、使用するシーンやカジュアル度、他の言い方などを説明してください。ただしここで列挙した以外の情報を加えても問題ありません。回答は日本語で、マークダウン形式の記号は絶対に含めないでください。`;
     await append({ role: "user", content: prompt });
   };
 
   const isReady = words.length > 0 && currentIndex >= 0;
 
+  const answers = messages.filter((message) => message.role === "assistant");
+
   return (
     <div className="max-h-screen flex flex-col items-end justify-center w-full max-w-256 mx-auto pt-8 sm:px-8 min-h-dvh sm:min-h-auto">
-      <div className="w-full grow overflow-y-scroll px-2">
+      <div className="w-full grow overflow-y-scroll px-2 space-y-2">
         {isReady && <RandomWord word={words[currentIndex]} isDetailHidden={isDetailHidden} />}
-        <div className="w-full bg-yellow-50">
-          {messages
-            .filter((message) => message.role === "assistant")
-            .map((message) => (
-              <div key={message.id}>
-                {message.parts
+        {answers.length > 0 && (
+          <div className="w-full bg-green-50 p-4 rounded-2xl">
+            {answers.map((answer) => (
+              <div key={answer.id}>
+                <span className="mr-1">💡</span>
+                {answer.parts
                   .filter((part) => part.type === "text")
                   .map((part, index) => (
                     <span key={index}>{part.text}</span>
                   ))}
               </div>
             ))}
-        </div>
+          </div>
+        )}
       </div>
 
       <div
@@ -108,8 +111,8 @@ export default function RandomWordContainer({ tags }: Props) {
         }`}
       >
         <Menu tagOptions={tags} defaultSelectedTags={selectedTags} onUpdate={onUpdateSelectedTags} />
-        <Button variant="outline" onClick={onClickGenerateSentence} disabled={!isReady}>
-          Generate Sentence
+        <Button variant="outline" onClick={onClickGenerateExplanation} disabled={!isReady}>
+          Explain word
         </Button>
         <Button variant="outline" onClick={onClickShowAnswer} disabled={!isReady || !isDetailHidden}>
           Show Answer
