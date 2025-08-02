@@ -84,8 +84,8 @@ export default function RandomWordContainer({ tags }: Props) {
   const isReady = words.length > 0 && currentIndex >= 0;
 
   return (
-    <div className="max-h-screen flex flex-col items-end justify-center w-full max-w-256 mx-auto pt-8 px-2 sm:px-8 gap-y-2 min-h-dvh sm:min-h-auto">
-      <div className="w-full grow overflow-y-scroll">
+    <div className="max-h-screen flex flex-col items-end justify-center w-full max-w-256 mx-auto pt-8 sm:px-8 min-h-dvh sm:min-h-auto">
+      <div className="w-full grow overflow-y-scroll px-2">
         {isReady && <RandomWord word={words[currentIndex]} isDetailHidden={isDetailHidden} />}
         <div className="w-full bg-yellow-50">
           {messages
@@ -103,7 +103,7 @@ export default function RandomWordContainer({ tags }: Props) {
       </div>
 
       <div
-        className={`w-full px-2 bg-white sm:w-auto flex flex-col sm:flex-row gap-2 sm:-order-1 items-end sm:items-center ${
+        className={`w-full px-2 bg-white sm:w-auto flex flex-col sm:flex-row gap-2 sm:-order-1 items-end sm:items-center pt-2 shadow-[0px_0px_16px_6px_#EEEEEE] sm:shadow-none ${
           isPwa ? "pb-16" : "pb-4"
         }`}
       >
@@ -114,7 +114,7 @@ export default function RandomWordContainer({ tags }: Props) {
         <Button variant="outline" onClick={onClickShowAnswer} disabled={!isReady || !isDetailHidden}>
           Show Answer
         </Button>
-        <div className="flex w-full gap-x-2">
+        <div className="flex w-full sm:w-auto gap-x-2">
           <Button onClick={onClickPrev} disabled={!isReady || currentIndex === 0} className="flex-1">
             Prev
           </Button>
