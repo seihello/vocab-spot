@@ -90,7 +90,7 @@ export default function RandomWordContainer({ tags }: Props) {
       <div className="w-full grow overflow-y-scroll px-2 space-y-2">
         {isReady && <RandomWord word={words[currentIndex]} isDetailHidden={isDetailHidden} />}
         {answers.length > 0 && (
-          <div className="w-full bg-green-50 p-4 rounded-2xl">
+          <div className="w-full bg-green-50 p-2 sm:p-4 rounded-2xl text-sm sm:text-base">
             {answers.map((answer) => (
               <div key={answer.id}>
                 <span className="mr-1">💡</span>
