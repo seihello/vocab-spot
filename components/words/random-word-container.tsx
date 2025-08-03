@@ -111,11 +111,11 @@ export default function RandomWordContainer({ tags }: Props) {
         }`}
       >
         <Menu tagOptions={tags} defaultSelectedTags={selectedTags} onUpdate={onUpdateSelectedTags} />
-        <Button variant="outline" onClick={onClickShowAnswer} disabled={!isReady || !isDetailHidden}>
+        <Button variant="green" onClick={onClickShowAnswer} disabled={!isReady || !isDetailHidden}>
           Show Answer
         </Button>
         <Button variant="outline" onClick={onClickGenerateExplanation} disabled={!isReady}>
-          Explain word
+          Explain Word
         </Button>
         <div className="flex w-full sm:w-auto gap-x-2">
           <Button onClick={onClickPrev} disabled={!isReady || currentIndex === 0} className="flex-1">
