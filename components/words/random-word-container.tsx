@@ -24,7 +24,7 @@ export default function RandomWordContainer({ tags }: Props) {
   const [isDetailHidden, setIsDetailHidden] = useState(true);
   const [isFinalWord, setIsFinalWord] = useState(false);
 
-  const { messages, append, setMessages } = useChat();
+  const { messages, status, append, setMessages } = useChat();
 
   const onClickShowAnswer = () => {
     setIsDetailHidden(false);
@@ -85,6 +85,8 @@ export default function RandomWordContainer({ tags }: Props) {
 
   const answers = messages.filter((message) => message.role === "assistant");
 
+  console.log("status", status);
+
   return (
     <div className="max-h-screen flex flex-col items-end justify-center w-full max-w-256 mx-auto pt-8 sm:px-8 min-h-dvh sm:min-h-auto">
       <div className="w-full grow overflow-y-scroll px-2 space-y-2">
@@ -114,16 +116,30 @@ export default function RandomWordContainer({ tags }: Props) {
         <Button variant="green" onClick={onClickShowAnswer} disabled={!isReady || !isDetailHidden}>
           Show Answer
         </Button>
-        <Button variant="outline" onClick={onClickGenerateExplanation} disabled={!isReady}>
+        <Button
+          variant="outline"
+          onClick={onClickGenerateExplanation}
+          disabled={!isReady || status === "submitted" || status === "streaming"}
+        >
           Explain Word
         </Button>
         <div className="flex w-full sm:w-auto gap-x-2">
-          <Button onClick={onClickPrev} disabled={!isReady || currentIndex === 0} className="flex-1">
+          <Button
+            onClick={onClickPrev}
+            disabled={!isReady || currentIndex === 0 || status === "submitted" || status === "streaming"}
+            className="flex-1"
+          >
             Prev
           </Button>
           <Button
             onClick={onClickNext}
-            disabled={!isReady || isFetchingWord || (currentIndex === words.length - 1 && isFinalWord)}
+            disabled={
+              !isReady ||
+              isFetchingWord ||
+              (currentIndex === words.length - 1 && isFinalWord) ||
+              status === "submitted" ||
+              status === "streaming"
+            }
             className="flex-1"
           >
             Next
