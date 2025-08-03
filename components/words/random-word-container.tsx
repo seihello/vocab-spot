@@ -62,10 +62,10 @@ export default function RandomWordContainer({ tags }: Props) {
   }, [currentIndex, isFetchingWord, selectedTags, words, setMessages]);
 
   useEffect(() => {
-    if (words.length === 0) {
+    if (words.length === 0 && !isFinalWord) {
       onClickNext();
     }
-  }, [words, onClickNext]);
+  }, [words, isFinalWord, onClickNext]);
 
   const onUpdateSelectedTags = (selectedTags: string[]) => {
     setSelectedTags(selectedTags);
