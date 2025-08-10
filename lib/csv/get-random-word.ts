@@ -3,7 +3,7 @@
 import { getWords } from "@/lib/csv/get-words";
 import { Word } from "@/lib/types";
 
-type Options = { excludeIds?: string[]; tags?: string[]; levels?: number[] };
+type Options = { excludeIds?: string[]; tags?: string[]; levels?: string[] };
 
 export async function getRandomWord(options: Options): Promise<Word | null> {
   const words = await getWords();
@@ -25,7 +25,7 @@ function matchCondition(word: Word, options: Options): boolean {
   if (options.tags && options.tags.length > 0 && !word.tags.some((tag) => options.tags?.includes(tag))) {
     return false;
   }
-  if (options.levels && options.levels.length > 0 && !options.levels.includes(word.level)) {
+  if (options.levels && options.levels.length > 0 && !options.levels.includes(word.level.toString())) {
     return false;
   }
 
