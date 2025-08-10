@@ -30,11 +30,11 @@ export default function SettingsDialog({ defaultSettings, onUpdate }: Props) {
       <DialogContent>
         <DialogTitle className="hidden" />
         <div className="space-y-4">
-          <h3 className="font-bold text-xl">Tags</h3>
+          <h3 className="font-bold text-xl">Settings</h3>
           <div className="flex gap-y-4 flex-wrap">
             <div className="flex items-center justify-center gap-x-2">
               <Checkbox
-                name="shouldShowTags"
+                id="shouldShowTags"
                 checked={settingsTemp.shouldShowTags}
                 onCheckedChange={(checked: CheckedState) =>
                   setSettingsTemp((prev) => ({ ...prev, shouldShowTags: checked === true }))
@@ -46,7 +46,7 @@ export default function SettingsDialog({ defaultSettings, onUpdate }: Props) {
             </div>
             <div className="flex items-center justify-center gap-x-2">
               <Checkbox
-                name="shouldShowLevel"
+                id="shouldShowLevel"
                 checked={settingsTemp.shouldShowLevel}
                 onCheckedChange={(checked: CheckedState) =>
                   setSettingsTemp((prev) => ({ ...prev, shouldShowLevel: checked === true }))
