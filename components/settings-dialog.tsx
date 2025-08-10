@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { IconSettings } from "@tabler/icons-react";
@@ -6,21 +8,19 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { Settings } from "@/lib/types";
+import { useAtom } from "jotai";
+import { settingsState } from "@/jotai/random-word/state";
 
-type Props = {
-  defaultSettings: Settings;
-  onUpdate: (settings: Settings) => void;
-};
-
-export default function SettingsDialog({ defaultSettings, onUpdate }: Props) {
+export default function SettingsDialog() {
   const [isOpen, setIsOpen] = useState(false);
-  const [settingsTemp, setSettingsTemp] = useState<Settings>(defaultSettings);
+  const [settings, setSettings] = useAtom(settingsState);
+  const [settingsTemp, setSettingsTemp] = useState<Settings>(settings);
 
   useEffect(() => {
     if (!isOpen) {
-      setSettingsTemp(defaultSettings);
+      setSettingsTemp(settings);
     }
-  }, [isOpen, defaultSettings]);
+  }, [isOpen, settings]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -61,7 +61,7 @@ export default function SettingsDialog({ defaultSettings, onUpdate }: Props) {
         <Button
           onClick={() => {
             setIsOpen(false);
-            onUpdate(settingsTemp);
+            setSettings(settingsTemp);
           }}
         >
           OK

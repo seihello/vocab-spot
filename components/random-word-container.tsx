@@ -2,7 +2,7 @@
 
 import TagFilterDialog from "@/components/tag-filter-dialog";
 import { Button } from "@/components/ui/button";
-import RandomWord from "@/components/words/random-word";
+import RandomWord from "@/components/random-word";
 import { useDisplayMode } from "@/hooks/use-display-mode";
 import { getRandomWord } from "@/lib/csv/get-random-word";
 import { Settings, Word } from "@/lib/types";
@@ -10,6 +10,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import LevelFilterDialog from "@/components/level-filter-dialog";
 import SettingsDialog from "@/components/settings-dialog";
+import { useAtom } from "jotai";
+import { settingsState } from "@/jotai/random-word/state";
 // import { useCompletion } from "@ai-sdk/react";
 
 type Props = {
@@ -20,10 +22,7 @@ export default function RandomWordContainer({ tags }: Props) {
   const { isPwa } = useDisplayMode();
 
   const [words, setWords] = useState<Word[]>([]);
-  const [settings, setSettings] = useState<Settings>({
-    shouldShowLevel: false,
-    shouldShowTags: false,
-  });
+  const [settings, setSettings] = useAtom(settingsState);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(-1);
@@ -96,10 +95,6 @@ export default function RandomWordContainer({ tags }: Props) {
     setWords([]);
   };
 
-  const onUpdateSettings = (settings: Settings) => {
-    setSettings(settings);
-  };
-
   const onClickGenerateExplanation = async () => {
     const prompt = `"${words[currentIndex].names}"という英語の解説をしてください。単語である場合は、接頭辞や語根、接尾辞などの分析や語源の解説、効果的な意味の覚え方などを解説してください。熟語やイディオムである場合は、使用するシーンやカジュアル度、他の言い方などを説明してください。ただしここで列挙した以外の情報を加えても問題ありません。回答は日本語で、マークダウン形式の記号は絶対に含めないでください。`;
     await append({ role: "user", content: prompt });
@@ -139,7 +134,7 @@ export default function RandomWordContainer({ tags }: Props) {
         <div className="flex items-center justify-evenly w-full sm:w-auto sm:gap-x-2">
           <TagFilterDialog tagOptions={tags} defaultSelectedTags={selectedTags} onUpdate={onUpdateSelectedTags} />
           <LevelFilterDialog defaultSelectedLevels={selectedLevels} onUpdate={onUpdateSelectedLevels} />
-          <SettingsDialog defaultSettings={settings} onUpdate={onUpdateSettings} />
+          <SettingsDialog />
         </div>
 
         <Button variant="green" onClick={onClickShowAnswer} disabled={!isReady || !isDetailHidden}>
