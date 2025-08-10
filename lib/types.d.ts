@@ -8,3 +8,8 @@ export type Word = {
   level: number;
   tags: string[]; // 配列にする
 };
+
+export type Settings = {
+  shouldShowTags: boolean;
+  shouldShowLevel: boolean;
+};

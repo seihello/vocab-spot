@@ -1,6 +1,6 @@
 "use client";
 
-import TagFilter from "@/components/tag-filter";
+import TagFilterDialog from "@/components/tag-filter-dialog";
 import { Button } from "@/components/ui/button";
 import RandomWord from "@/components/words/random-word";
 import { useDisplayMode } from "@/hooks/use-display-mode";
@@ -8,7 +8,8 @@ import { getRandomWord } from "@/lib/csv/get-random-word";
 import { Word } from "@/lib/types";
 import React, { useCallback, useEffect, useState } from "react";
 import { useChat } from "@ai-sdk/react";
-import LevelFilter from "@/components/level-filter";
+import LevelFilterDialog from "@/components/level-filter-dialog";
+import SettingsDialog from "@/components/settings-dialog";
 // import { useCompletion } from "@ai-sdk/react";
 
 type Props = {
@@ -128,8 +129,9 @@ export default function RandomWordContainer({ tags }: Props) {
         }`}
       >
         <div className="flex items-center justify-evenly w-full sm:w-auto sm:gap-x-2">
-          <TagFilter tagOptions={tags} defaultSelectedTags={selectedTags} onUpdate={onUpdateSelectedTags} />
-          <LevelFilter defaultSelectedLevels={selectedLevels} onUpdate={onUpdateSelectedLevels} />
+          <TagFilterDialog tagOptions={tags} defaultSelectedTags={selectedTags} onUpdate={onUpdateSelectedTags} />
+          <LevelFilterDialog defaultSelectedLevels={selectedLevels} onUpdate={onUpdateSelectedLevels} />
+          <SettingsDialog />
         </div>
 
         <Button variant="green" onClick={onClickShowAnswer} disabled={!isReady || !isDetailHidden}>

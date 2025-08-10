@@ -1,65 +1,61 @@
 import React, { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { IconNumber123 } from "@tabler/icons-react";
+import { IconSettings } from "@tabler/icons-react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
+import { Settings } from "@/lib/types";
 
-type Props = {
-  defaultSelectedLevels: string[];
-  onUpdate: (selectedLevels: string[]) => void;
-};
-
-export default function LevelFilter({ defaultSelectedLevels, onUpdate }: Props) {
+export default function SettingsDialog() {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedLevelsTemp, setSelectedLevelsTemp] = useState<string[]>(defaultSelectedLevels);
+  // const [selectedTagsTemp, setSelectedTagsTemp] = useState<string[]>(defaultSelectedTags);
 
-  useEffect(() => {
-    if (!isOpen) {
-      setSelectedLevelsTemp(defaultSelectedLevels);
-    }
-  }, [isOpen, defaultSelectedLevels]);
+  // useEffect(() => {
+  //   if (!isOpen) {
+  //     setSelectedTagsTemp(defaultSelectedTags);
+  //   }
+  // }, [isOpen, defaultSelectedTags]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger className="rounded-full border size-16 flex justify-center items-center">
-        <IconNumber123 size={32} color="#666666" />
+        <IconSettings size={32} color="#666666" />
       </DialogTrigger>
       <DialogContent>
         <DialogTitle className="hidden" />
         <div className="space-y-4">
-          <h3 className="font-bold text-xl">Levels</h3>
+          <h3 className="font-bold text-xl">Tags</h3>
           <div className="flex gap-y-4 flex-wrap">
-            {["1", "2", "3", "4", "5"].map((levelOption, index) => (
+            {/* {tagOptions.map((tagOption, index) => (
               <div key={index} className="flex items-center justify-center gap-x-2 w-1/3">
                 <Checkbox
-                  id={levelOption}
-                  name={levelOption}
-                  checked={selectedLevelsTemp.includes(levelOption)}
+                  id={tagOption}
+                  name={tagOption}
+                  checked={selectedTagsTemp.includes(tagOption)}
                   onCheckedChange={(checked: CheckedState) =>
-                    setSelectedLevelsTemp((prev) => {
-                      if (checked === true && !prev.includes(levelOption)) {
-                        return [...prev, levelOption];
-                      } else if (checked === false && prev.includes(levelOption)) {
-                        return prev.filter((prevTag) => prevTag !== levelOption);
+                    setSelectedTagsTemp((prev) => {
+                      if (checked === true && !prev.includes(tagOption)) {
+                        return [...prev, tagOption];
+                      } else if (checked === false && prev.includes(tagOption)) {
+                        return prev.filter((prevTag) => prevTag !== tagOption);
                       }
                       return prev;
                     })
                   }
                   className=""
                 />
-                <Label htmlFor={levelOption} className="grow">
-                  {levelOption}
+                <Label htmlFor={tagOption} className="grow">
+                  {tagOption}
                 </Label>
               </div>
-            ))}
+            ))} */}
           </div>
         </div>
         <Button
           onClick={() => {
             setIsOpen(false);
-            onUpdate(selectedLevelsTemp);
+            // onUpdate(selectedTagsTemp);
           }}
         >
           OK

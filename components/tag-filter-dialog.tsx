@@ -12,7 +12,7 @@ type Props = {
   onUpdate: (selectedTags: string[]) => void;
 };
 
-export default function TagFilter({ tagOptions, defaultSelectedTags, onUpdate }: Props) {
+export default function TagFilterDialog({ tagOptions, defaultSelectedTags, onUpdate }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTagsTemp, setSelectedTagsTemp] = useState<string[]>(defaultSelectedTags);
 
