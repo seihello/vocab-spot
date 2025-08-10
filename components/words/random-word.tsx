@@ -1,25 +1,27 @@
-import { Word } from "@/lib/types";
+import { Settings, Word } from "@/lib/types";
 import React from "react";
 
 type Props = {
   word: Word;
+  settings: Settings;
   isDetailHidden: boolean;
 };
 
-export default function RandomWord({ word, isDetailHidden }: Props) {
+export default function RandomWord({ word, settings, isDetailHidden }: Props) {
   return (
     <div className="space-y-2 whitespace-pre-line w-full">
       <div className="font-bold text-2xl text-primary-700">{word.names}</div>
-      {!isDetailHidden && (
-        <>
-          <div className="text-gray-500">{word.meanings}</div>
-          <div>{word.sentences}</div>
-          <div className="flex flex-wrap gap-2 justify-end">
-            {word.level && (
-              <div className="border border-gray-300 rounded-md px-2 py-1 text-xs flex items-center justify-center">
-                Level {word.level}
-              </div>
-            )}
+
+      {!isDetailHidden && <div className="text-gray-500">{word.meanings}</div>}
+      {!isDetailHidden && <div>{word.sentences}</div>}
+      <div className="flex flex-wrap gap-2 justify-end">
+        {(settings.shouldShowLevel || !isDetailHidden) && word.level && (
+          <div className="border border-gray-300 rounded-md px-2 py-1 text-xs flex items-center justify-center">
+            Level {word.level}
+          </div>
+        )}
+        {(settings.shouldShowTags || !isDetailHidden) && (
+          <>
             {word.tags.map((tag, index) => (
               <div
                 key={index}
@@ -28,9 +30,9 @@ export default function RandomWord({ word, isDetailHidden }: Props) {
                 {tag}
               </div>
             ))}
-          </div>
-        </>
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 }

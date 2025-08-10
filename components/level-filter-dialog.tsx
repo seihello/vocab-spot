@@ -47,7 +47,6 @@ export default function LevelFilterDialog({ defaultSelectedLevels, onUpdate }: P
                       return prev;
                     })
                   }
-                  className=""
                 />
                 <Label htmlFor={levelOption} className="grow">
                   {levelOption}

@@ -48,7 +48,6 @@ export default function TagFilterDialog({ tagOptions, defaultSelectedTags, onUpd
                       return prev;
                     })
                   }
-                  className=""
                 />
                 <Label htmlFor={tagOption} className="grow">
                   {tagOption}

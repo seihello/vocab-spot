@@ -7,15 +7,20 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { Settings } from "@/lib/types";
 
-export default function SettingsDialog() {
-  const [isOpen, setIsOpen] = useState(false);
-  // const [selectedTagsTemp, setSelectedTagsTemp] = useState<string[]>(defaultSelectedTags);
+type Props = {
+  defaultSettings: Settings;
+  onUpdate: (settings: Settings) => void;
+};
 
-  // useEffect(() => {
-  //   if (!isOpen) {
-  //     setSelectedTagsTemp(defaultSelectedTags);
-  //   }
-  // }, [isOpen, defaultSelectedTags]);
+export default function SettingsDialog({ defaultSettings, onUpdate }: Props) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [settingsTemp, setSettingsTemp] = useState<Settings>(defaultSettings);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setSettingsTemp(defaultSettings);
+    }
+  }, [isOpen, defaultSettings]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -27,35 +32,36 @@ export default function SettingsDialog() {
         <div className="space-y-4">
           <h3 className="font-bold text-xl">Tags</h3>
           <div className="flex gap-y-4 flex-wrap">
-            {/* {tagOptions.map((tagOption, index) => (
-              <div key={index} className="flex items-center justify-center gap-x-2 w-1/3">
-                <Checkbox
-                  id={tagOption}
-                  name={tagOption}
-                  checked={selectedTagsTemp.includes(tagOption)}
-                  onCheckedChange={(checked: CheckedState) =>
-                    setSelectedTagsTemp((prev) => {
-                      if (checked === true && !prev.includes(tagOption)) {
-                        return [...prev, tagOption];
-                      } else if (checked === false && prev.includes(tagOption)) {
-                        return prev.filter((prevTag) => prevTag !== tagOption);
-                      }
-                      return prev;
-                    })
-                  }
-                  className=""
-                />
-                <Label htmlFor={tagOption} className="grow">
-                  {tagOption}
-                </Label>
-              </div>
-            ))} */}
+            <div className="flex items-center justify-center gap-x-2">
+              <Checkbox
+                name="shouldShowTags"
+                checked={settingsTemp.shouldShowTags}
+                onCheckedChange={(checked: CheckedState) =>
+                  setSettingsTemp((prev) => ({ ...prev, shouldShowTags: checked === true }))
+                }
+              />
+              <Label htmlFor="shouldShowTags" className="grow">
+                {`Show the word's tags as default`}
+              </Label>
+            </div>
+            <div className="flex items-center justify-center gap-x-2">
+              <Checkbox
+                name="shouldShowLevel"
+                checked={settingsTemp.shouldShowLevel}
+                onCheckedChange={(checked: CheckedState) =>
+                  setSettingsTemp((prev) => ({ ...prev, shouldShowLevel: checked === true }))
+                }
+              />
+              <Label htmlFor="shouldShowLevel" className="grow">
+                {`Show the word's level as default`}
+              </Label>
+            </div>
           </div>
         </div>
         <Button
           onClick={() => {
             setIsOpen(false);
-            // onUpdate(selectedTagsTemp);
+            onUpdate(settingsTemp);
           }}
         >
           OK
