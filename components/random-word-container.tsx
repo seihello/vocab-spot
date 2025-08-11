@@ -30,7 +30,7 @@ export default function RandomWordContainer({ tags }: Props) {
   const [isDetailHidden, setIsDetailHidden] = useState(true);
   const [isFinalWord, setIsFinalWord] = useState(false);
 
-  const { isLoadingLocalStorage } = useLocalStorage();
+  const { isLoading: isLoadingLocalStorage } = useLocalStorage();
 
   const { messages, status, append, setMessages } = useChat();
 
