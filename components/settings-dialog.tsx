@@ -73,14 +73,14 @@ export default function SettingsDialog() {
               onCheckedChange={(checked: CheckedState) =>
                 setSettingsTemp((prev) => ({ ...prev, shouldShowTags: checked === true }))
               }
-            >{`Show tags as default`}</SettingItem>
+            >{`Show tags by default`}</SettingItem>
             <SettingItem
               id="shouldShowLevel"
               checked={settingsTemp.shouldShowLevel}
               onCheckedChange={(checked: CheckedState) =>
                 setSettingsTemp((prev) => ({ ...prev, shouldShowLevel: checked === true }))
               }
-            >{`Show a level as default`}</SettingItem>
+            >{`Show a level by default`}</SettingItem>
           </div>
         </div>
         <Button
