@@ -5,22 +5,23 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
+import { useAtom } from "jotai";
+import { selectedTagsState } from "@/jotai/random-word/state";
 
 type Props = {
   tagOptions: string[];
-  defaultSelectedTags: string[];
-  onUpdate: (selectedTags: string[]) => void;
 };
 
-export default function TagFilterDialog({ tagOptions, defaultSelectedTags, onUpdate }: Props) {
+export default function TagFilterDialog({ tagOptions }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedTagsTemp, setSelectedTagsTemp] = useState<string[]>(defaultSelectedTags);
+  const [selectedTags, setSelectedTags] = useAtom(selectedTagsState);
+  const [selectedTagsTemp, setSelectedTagsTemp] = useState<string[]>(selectedTags);
 
   useEffect(() => {
     if (!isOpen) {
-      setSelectedTagsTemp(defaultSelectedTags);
+      setSelectedTagsTemp(selectedTags);
     }
-  }, [isOpen, defaultSelectedTags]);
+  }, [isOpen, selectedTags]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -59,7 +60,7 @@ export default function TagFilterDialog({ tagOptions, defaultSelectedTags, onUpd
         <Button
           onClick={() => {
             setIsOpen(false);
-            onUpdate(selectedTagsTemp);
+            setSelectedTags(selectedTagsTemp);
           }}
         >
           OK

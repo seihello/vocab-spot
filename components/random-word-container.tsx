@@ -2,14 +2,16 @@
 
 import TagFilterDialog from "@/components/tag-filter-dialog";
 import { Button } from "@/components/ui/button";
-import RandomWord from "@/components/words/random-word";
+import RandomWord from "@/components/random-word";
 import { useDisplayMode } from "@/hooks/use-display-mode";
 import { getRandomWord } from "@/lib/csv/get-random-word";
-import { Settings, Word } from "@/lib/types";
+import { Word } from "@/lib/types";
 import React, { useCallback, useEffect, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import LevelFilterDialog from "@/components/level-filter-dialog";
 import SettingsDialog from "@/components/settings-dialog";
+import { useAtom } from "jotai";
+import { selectedLevelsState, selectedTagsState } from "@/jotai/random-word/state";
 // import { useCompletion } from "@ai-sdk/react";
 
 type Props = {
@@ -20,12 +22,8 @@ export default function RandomWordContainer({ tags }: Props) {
   const { isPwa } = useDisplayMode();
 
   const [words, setWords] = useState<Word[]>([]);
-  const [settings, setSettings] = useState<Settings>({
-    shouldShowLevel: false,
-    shouldShowTags: false,
-  });
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
+  const [selectedTags] = useAtom(selectedTagsState);
+  const [selectedLevels] = useAtom(selectedLevelsState);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [isFetchingWord, setIsFetchingWord] = useState(false);
   const [isDetailHidden, setIsDetailHidden] = useState(true);
@@ -78,27 +76,13 @@ export default function RandomWordContainer({ tags }: Props) {
     }
   }, [words, isFinalWord, onClickNext]);
 
-  const onUpdateSelectedTags = (selectedTags: string[]) => {
-    setSelectedTags(selectedTags);
+  useEffect(() => {
     setCurrentIndex(-1);
     setIsFinalWord(false);
     setIsDetailHidden(false);
     setMessages([]);
     setWords([]);
-  };
-
-  const onUpdateSelectedLevels = (selectedLevels: string[]) => {
-    setSelectedLevels(selectedLevels);
-    setCurrentIndex(-1);
-    setIsFinalWord(false);
-    setIsDetailHidden(false);
-    setMessages([]);
-    setWords([]);
-  };
-
-  const onUpdateSettings = (settings: Settings) => {
-    setSettings(settings);
-  };
+  }, [selectedTags, selectedLevels, setMessages]);
 
   const onClickGenerateExplanation = async () => {
     const prompt = `"${words[currentIndex].names}"という英語の解説をしてください。単語である場合は、接頭辞や語根、接尾辞などの分析や語源の解説、効果的な意味の覚え方などを解説してください。熟語やイディオムである場合は、使用するシーンやカジュアル度、他の言い方などを説明してください。ただしここで列挙した以外の情報を加えても問題ありません。回答は日本語で、マークダウン形式の記号は絶対に含めないでください。`;
@@ -114,7 +98,7 @@ export default function RandomWordContainer({ tags }: Props) {
   return (
     <div className="max-h-screen flex flex-col items-end justify-center w-full max-w-256 mx-auto pt-8 sm:px-8 min-h-dvh sm:min-h-auto">
       <div className="w-full grow overflow-y-scroll px-2 space-y-2">
-        {isReady && <RandomWord word={words[currentIndex]} settings={settings} isDetailHidden={isDetailHidden} />}
+        {isReady && <RandomWord word={words[currentIndex]} isDetailHidden={isDetailHidden} />}
         {answers.length > 0 && (
           <div className="w-full bg-green-50 p-2 sm:p-4 rounded-2xl text-sm sm:text-base">
             {answers.map((answer) => (
@@ -137,9 +121,9 @@ export default function RandomWordContainer({ tags }: Props) {
         }`}
       >
         <div className="flex items-center justify-evenly w-full sm:w-auto sm:gap-x-2">
-          <TagFilterDialog tagOptions={tags} defaultSelectedTags={selectedTags} onUpdate={onUpdateSelectedTags} />
-          <LevelFilterDialog defaultSelectedLevels={selectedLevels} onUpdate={onUpdateSelectedLevels} />
-          <SettingsDialog defaultSettings={settings} onUpdate={onUpdateSettings} />
+          <TagFilterDialog tagOptions={tags} />
+          <LevelFilterDialog />
+          <SettingsDialog />
         </div>
 
         <Button variant="green" onClick={onClickShowAnswer} disabled={!isReady || !isDetailHidden}>

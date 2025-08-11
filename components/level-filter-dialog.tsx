@@ -5,21 +5,19 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
+import { useAtom } from "jotai";
+import { selectedLevelsState } from "@/jotai/random-word/state";
 
-type Props = {
-  defaultSelectedLevels: string[];
-  onUpdate: (selectedLevels: string[]) => void;
-};
-
-export default function LevelFilterDialog({ defaultSelectedLevels, onUpdate }: Props) {
+export default function LevelFilterDialog() {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedLevelsTemp, setSelectedLevelsTemp] = useState<string[]>(defaultSelectedLevels);
+  const [selectedLevels, setSelectedLevels] = useAtom(selectedLevelsState);
+  const [selectedLevelsTemp, setSelectedLevelsTemp] = useState<string[]>(selectedLevels);
 
   useEffect(() => {
     if (!isOpen) {
-      setSelectedLevelsTemp(defaultSelectedLevels);
+      setSelectedLevelsTemp(selectedLevels);
     }
-  }, [isOpen, defaultSelectedLevels]);
+  }, [isOpen, selectedLevels]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -32,7 +30,7 @@ export default function LevelFilterDialog({ defaultSelectedLevels, onUpdate }: P
           <h3 className="font-bold text-xl">Levels</h3>
           <div className="flex gap-y-4 flex-wrap">
             {["1", "2", "3", "4", "5"].map((levelOption, index) => (
-              <div key={index} className="flex items-center justify-center gap-x-2 w-1/3">
+              <div key={index} className="flex items-center justify-center gap-x-2 w-1/5">
                 <Checkbox
                   id={levelOption}
                   name={levelOption}
@@ -58,7 +56,7 @@ export default function LevelFilterDialog({ defaultSelectedLevels, onUpdate }: P
         <Button
           onClick={() => {
             setIsOpen(false);
-            onUpdate(selectedLevelsTemp);
+            setSelectedLevels(selectedLevelsTemp);
           }}
         >
           OK
