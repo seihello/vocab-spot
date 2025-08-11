@@ -9,7 +9,7 @@ type Props = {
 };
 
 export default function RandomWord({ word, isDetailHidden }: Props) {
-  const [settings, setSettings] = useAtom(settingsState);
+  const [settings] = useAtom(settingsState);
 
   return (
     <div className="space-y-2 whitespace-pre-line w-full">

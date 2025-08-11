@@ -5,13 +5,13 @@ import { Button } from "@/components/ui/button";
 import RandomWord from "@/components/random-word";
 import { useDisplayMode } from "@/hooks/use-display-mode";
 import { getRandomWord } from "@/lib/csv/get-random-word";
-import { Settings, Word } from "@/lib/types";
+import { Word } from "@/lib/types";
 import React, { useCallback, useEffect, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import LevelFilterDialog from "@/components/level-filter-dialog";
 import SettingsDialog from "@/components/settings-dialog";
 import { useAtom } from "jotai";
-import { selectedLevelsState, selectedTagsState, settingsState } from "@/jotai/random-word/state";
+import { selectedLevelsState, selectedTagsState } from "@/jotai/random-word/state";
 // import { useCompletion } from "@ai-sdk/react";
 
 type Props = {
@@ -22,9 +22,8 @@ export default function RandomWordContainer({ tags }: Props) {
   const { isPwa } = useDisplayMode();
 
   const [words, setWords] = useState<Word[]>([]);
-  const [settings, setSettings] = useAtom(settingsState);
-  const [selectedTags, setSelectedTags] = useAtom(selectedTagsState);
-  const [selectedLevels, setSelectedLevels] = useAtom(selectedLevelsState);
+  const [selectedTags] = useAtom(selectedTagsState);
+  const [selectedLevels] = useAtom(selectedLevelsState);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [isFetchingWord, setIsFetchingWord] = useState(false);
   const [isDetailHidden, setIsDetailHidden] = useState(true);
