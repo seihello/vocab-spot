@@ -12,8 +12,8 @@ export default function RandomWord({ word, settings, isDetailHidden }: Props) {
     <div className="space-y-2 whitespace-pre-line w-full">
       <div className="font-bold text-2xl text-primary-700">{word.names}</div>
 
-      {!isDetailHidden && <div className="text-gray-500">{word.meanings}</div>}
-      {!isDetailHidden && <div>{word.sentences}</div>}
+      {(settings.shouldShowMeanings || !isDetailHidden) && <div className="text-gray-500">{word.meanings}</div>}
+      {(settings.shouldShowSentences || !isDetailHidden) && <div>{word.sentences}</div>}
       <div className="flex flex-wrap gap-2 justify-end">
         {(settings.shouldShowLevel || !isDetailHidden) && word.level && (
           <div className="border border-gray-300 rounded-md px-2 py-1 text-xs flex items-center justify-center">

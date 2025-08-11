@@ -23,7 +23,7 @@ function SettingItem({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center justify-center gap-x-2">
+    <div className="flex items-center justify-center gap-x-2 w-full">
       <Checkbox id={id} checked={checked} onCheckedChange={onCheckedChange} />
       <Label htmlFor={id} className="grow">
         {children}
@@ -54,19 +54,33 @@ export default function SettingsDialog() {
           <h3 className="font-bold text-xl">Settings</h3>
           <div className="flex gap-y-4 flex-wrap">
             <SettingItem
+              id="shouldShowMeanings"
+              checked={settingsTemp.shouldShowMeanings}
+              onCheckedChange={(checked: CheckedState) =>
+                setSettingsTemp((prev) => ({ ...prev, shouldShowMeanings: checked === true }))
+              }
+            >{`Show meanings by default`}</SettingItem>
+            <SettingItem
+              id="shouldShowSentences"
+              checked={settingsTemp.shouldShowSentences}
+              onCheckedChange={(checked: CheckedState) =>
+                setSettingsTemp((prev) => ({ ...prev, shouldShowSentences: checked === true }))
+              }
+            >{`Show sentences by default`}</SettingItem>
+            <SettingItem
               id="shouldShowTags"
               checked={settingsTemp.shouldShowTags}
               onCheckedChange={(checked: CheckedState) =>
                 setSettingsTemp((prev) => ({ ...prev, shouldShowTags: checked === true }))
               }
-            >{`Show the word's tags as default`}</SettingItem>
+            >{`Show tags as default`}</SettingItem>
             <SettingItem
               id="shouldShowLevel"
               checked={settingsTemp.shouldShowLevel}
               onCheckedChange={(checked: CheckedState) =>
                 setSettingsTemp((prev) => ({ ...prev, shouldShowLevel: checked === true }))
               }
-            >{`Show the word's level as default`}</SettingItem>
+            >{`Show a level as default`}</SettingItem>
           </div>
         </div>
         <Button
