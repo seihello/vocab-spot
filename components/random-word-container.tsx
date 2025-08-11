@@ -11,7 +11,8 @@ import { useChat } from "@ai-sdk/react";
 import LevelFilterDialog from "@/components/level-filter-dialog";
 import SettingsDialog from "@/components/settings-dialog";
 import { useAtom } from "jotai";
-import { selectedLevelsState, selectedTagsState } from "@/jotai/random-word/state";
+import { selectedLevelsState, selectedTagsState } from "@/lib/jotai/random-word/state";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 // import { useCompletion } from "@ai-sdk/react";
 
 type Props = {
@@ -28,6 +29,8 @@ export default function RandomWordContainer({ tags }: Props) {
   const [isFetchingWord, setIsFetchingWord] = useState(false);
   const [isDetailHidden, setIsDetailHidden] = useState(true);
   const [isFinalWord, setIsFinalWord] = useState(false);
+
+  const { isLoading: isLoadingLocalStorage } = useLocalStorage();
 
   const { messages, status, append, setMessages } = useChat();
 
@@ -71,10 +74,12 @@ export default function RandomWordContainer({ tags }: Props) {
   }, [currentIndex, isFetchingWord, selectedTags, selectedLevels, words, setMessages]);
 
   useEffect(() => {
-    if (words.length === 0 && !isFinalWord) {
+    if (words.length === 0 && !isFinalWord && !isLoadingLocalStorage) {
+      console.log("onClickNext");
+
       onClickNext();
     }
-  }, [words, isFinalWord, onClickNext]);
+  }, [words, isFinalWord, isLoadingLocalStorage, onClickNext]);
 
   useEffect(() => {
     setCurrentIndex(-1);
@@ -92,8 +97,6 @@ export default function RandomWordContainer({ tags }: Props) {
   const isReady = words.length > 0 && currentIndex >= 0;
 
   const answers = messages.filter((message) => message.role === "assistant");
-
-  console.log("status", status);
 
   return (
     <div className="max-h-screen flex flex-col items-end justify-center w-full max-w-256 mx-auto pt-8 sm:px-8 min-h-dvh sm:min-h-auto">

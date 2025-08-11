@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import RandomWordContainer from "@/components/random-word-container";
-import { RandomWordProvider } from "@/jotai/random-word/provider";
+import { RandomWordProvider } from "@/lib/jotai/random-word/provider";
 import { getTags } from "@/lib/csv/get-tags";
 import { use } from "react";
 export default function Page() {
