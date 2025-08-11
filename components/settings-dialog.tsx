@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { Settings } from "@/lib/types";
 import { useAtom } from "jotai";
-import { settingsState } from "@/jotai/random-word/state";
+import { settingsState } from "@/lib/jotai/random-word/state";
 
 function SettingItem({
   id,

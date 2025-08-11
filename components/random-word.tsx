@@ -1,4 +1,4 @@
-import { settingsState } from "@/jotai/random-word/state";
+import { settingsState } from "@/lib/jotai/random-word/state";
 import { Word } from "@/lib/types";
 import { useAtom } from "jotai";
 import React from "react";

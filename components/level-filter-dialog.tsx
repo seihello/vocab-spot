@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { useAtom } from "jotai";
-import { selectedLevelsState } from "@/jotai/random-word/state";
+import { selectedLevelsState } from "@/lib/jotai/random-word/state";
 
 export default function LevelFilterDialog() {
   const [isOpen, setIsOpen] = useState(false);

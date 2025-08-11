@@ -11,7 +11,7 @@ import { useChat } from "@ai-sdk/react";
 import LevelFilterDialog from "@/components/level-filter-dialog";
 import SettingsDialog from "@/components/settings-dialog";
 import { useAtom } from "jotai";
-import { selectedLevelsState, selectedTagsState } from "@/jotai/random-word/state";
+import { selectedLevelsState, selectedTagsState } from "@/lib/jotai/random-word/state";
 // import { useCompletion } from "@ai-sdk/react";
 
 type Props = {

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { useAtom } from "jotai";
-import { selectedTagsState } from "@/jotai/random-word/state";
+import { selectedTagsState } from "@/lib/jotai/random-word/state";
 
 type Props = {
   tagOptions: string[];
