@@ -32,7 +32,7 @@ export default function LevelFilterDialog({ defaultSelectedLevels, onUpdate }: P
           <h3 className="font-bold text-xl">Levels</h3>
           <div className="flex gap-y-4 flex-wrap">
             {["1", "2", "3", "4", "5"].map((levelOption, index) => (
-              <div key={index} className="flex items-center justify-center gap-x-2 w-1/3">
+              <div key={index} className="flex items-center justify-center gap-x-2 w-1/5">
                 <Checkbox
                   id={levelOption}
                   name={levelOption}
