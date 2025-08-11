@@ -7,13 +7,12 @@ import { useDisplayMode } from "@/hooks/use-display-mode";
 import { getRandomWord } from "@/lib/csv/get-random-word";
 import { Word } from "@/lib/types";
 import React, { useCallback, useEffect, useState } from "react";
-import { useChat } from "@ai-sdk/react";
 import LevelFilterDialog from "@/components/level-filter-dialog";
 import SettingsDialog from "@/components/settings-dialog";
 import { useAtom } from "jotai";
 import { selectedLevelsState, selectedTagsState } from "@/lib/jotai/random-word/state";
 import { useLocalStorage } from "@/hooks/use-local-storage";
-// import { useCompletion } from "@ai-sdk/react";
+import { useAiExplanation } from "@/hooks/use-ai-explanation";
 
 type Props = {
   tags: string[];
@@ -32,7 +31,7 @@ export default function RandomWordContainer({ tags }: Props) {
 
   const { isLoading: isLoadingLocalStorage } = useLocalStorage();
 
-  const { messages, status, append, setMessages } = useChat();
+  const { messages, status, setMessages, run: generateExplanation } = useAiExplanation();
 
   const onClickShowAnswer = () => {
     setIsDetailHidden(false);
@@ -75,8 +74,6 @@ export default function RandomWordContainer({ tags }: Props) {
 
   useEffect(() => {
     if (words.length === 0 && !isFinalWord && !isLoadingLocalStorage) {
-      console.log("onClickNext");
-
       onClickNext();
     }
   }, [words, isFinalWord, isLoadingLocalStorage, onClickNext]);
@@ -88,11 +85,6 @@ export default function RandomWordContainer({ tags }: Props) {
     setMessages([]);
     setWords([]);
   }, [selectedTags, selectedLevels, setMessages]);
-
-  const onClickGenerateExplanation = async () => {
-    const prompt = `"${words[currentIndex].names}"という英語の解説をしてください。単語である場合は、接頭辞や語根、接尾辞などの分析や語源の解説、効果的な意味の覚え方などを解説してください。熟語やイディオムである場合は、使用するシーンやカジュアル度、他の言い方などを説明してください。ただしここで列挙した以外の情報を加えても問題ありません。回答は日本語で、マークダウン形式の記号は絶対に含めないでください。`;
-    await append({ role: "user", content: prompt });
-  };
 
   const isReady = words.length > 0 && currentIndex >= 0;
 
@@ -134,7 +126,7 @@ export default function RandomWordContainer({ tags }: Props) {
         </Button>
         <Button
           variant="outline"
-          onClick={onClickGenerateExplanation}
+          onClick={() => generateExplanation(words[currentIndex].names)}
           disabled={!isReady || status === "submitted" || status === "streaming"}
         >
           Explain Word
