@@ -99,7 +99,7 @@ export default function RandomWordContainer({ tags }: Props) {
   return (
     <div className="max-h-screen flex flex-col items-end justify-center w-full max-w-256 mx-auto pt-8 sm:px-8 min-h-dvh sm:min-h-auto">
       <div className="w-full grow overflow-y-scroll px-2 space-y-2">
-        {isReady && <RandomWord word={words[currentIndex]} settings={settings} isDetailHidden={isDetailHidden} />}
+        {isReady && <RandomWord word={words[currentIndex]} isDetailHidden={isDetailHidden} />}
         {answers.length > 0 && (
           <div className="w-full bg-green-50 p-2 sm:p-4 rounded-2xl text-sm sm:text-base">
             {answers.map((answer) => (

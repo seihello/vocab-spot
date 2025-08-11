@@ -1,13 +1,16 @@
-import { Settings, Word } from "@/lib/types";
+import { settingsState } from "@/jotai/random-word/state";
+import { Word } from "@/lib/types";
+import { useAtom } from "jotai";
 import React from "react";
 
 type Props = {
   word: Word;
-  settings: Settings;
   isDetailHidden: boolean;
 };
 
-export default function RandomWord({ word, settings, isDetailHidden }: Props) {
+export default function RandomWord({ word, isDetailHidden }: Props) {
+  const [settings, setSettings] = useAtom(settingsState);
+
   return (
     <div className="space-y-2 whitespace-pre-line w-full">
       <div className="font-bold text-2xl text-primary-700">{word.names}</div>
