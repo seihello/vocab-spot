@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { useAtom } from "jotai";
 import { selectedTagsState } from "@/lib/jotai/random-word/state";
+import { setSelectedTags as setSelectedTagsToLocalStorage } from "@/lib/local-storage/set-selected-tags";
 
 type Props = {
   tagOptions: string[];
@@ -61,6 +62,7 @@ export default function TagFilterDialog({ tagOptions }: Props) {
           onClick={() => {
             setIsOpen(false);
             setSelectedTags(selectedTagsTemp);
+            setSelectedTagsToLocalStorage(selectedTagsTemp);
           }}
         >
           OK
