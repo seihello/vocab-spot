@@ -11,6 +11,27 @@ import { Settings } from "@/lib/types";
 import { useAtom } from "jotai";
 import { settingsState } from "@/jotai/random-word/state";
 
+function SettingItem({
+  id,
+  checked,
+  onCheckedChange,
+  children,
+}: {
+  id: string;
+  checked: boolean;
+  onCheckedChange: (checked: CheckedState) => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-center justify-center gap-x-2">
+      <Checkbox id={id} checked={checked} onCheckedChange={onCheckedChange} />
+      <Label htmlFor={id} className="grow">
+        {children}
+      </Label>
+    </div>
+  );
+}
+
 export default function SettingsDialog() {
   const [isOpen, setIsOpen] = useState(false);
   const [settings, setSettings] = useAtom(settingsState);
@@ -32,30 +53,20 @@ export default function SettingsDialog() {
         <div className="space-y-4">
           <h3 className="font-bold text-xl">Settings</h3>
           <div className="flex gap-y-4 flex-wrap">
-            <div className="flex items-center justify-center gap-x-2">
-              <Checkbox
-                id="shouldShowTags"
-                checked={settingsTemp.shouldShowTags}
-                onCheckedChange={(checked: CheckedState) =>
-                  setSettingsTemp((prev) => ({ ...prev, shouldShowTags: checked === true }))
-                }
-              />
-              <Label htmlFor="shouldShowTags" className="grow">
-                {`Show the word's tags as default`}
-              </Label>
-            </div>
-            <div className="flex items-center justify-center gap-x-2">
-              <Checkbox
-                id="shouldShowLevel"
-                checked={settingsTemp.shouldShowLevel}
-                onCheckedChange={(checked: CheckedState) =>
-                  setSettingsTemp((prev) => ({ ...prev, shouldShowLevel: checked === true }))
-                }
-              />
-              <Label htmlFor="shouldShowLevel" className="grow">
-                {`Show the word's level as default`}
-              </Label>
-            </div>
+            <SettingItem
+              id="shouldShowTags"
+              checked={settingsTemp.shouldShowTags}
+              onCheckedChange={(checked: CheckedState) =>
+                setSettingsTemp((prev) => ({ ...prev, shouldShowTags: checked === true }))
+              }
+            >{`Show the word's tags as default`}</SettingItem>
+            <SettingItem
+              id="shouldShowLevel"
+              checked={settingsTemp.shouldShowLevel}
+              onCheckedChange={(checked: CheckedState) =>
+                setSettingsTemp((prev) => ({ ...prev, shouldShowLevel: checked === true }))
+              }
+            >{`Show the word's level as default`}</SettingItem>
           </div>
         </div>
         <Button

@@ -10,6 +10,8 @@ export type Word = {
 };
 
 export type Settings = {
+  shouldShowMeanings: boolean;
+  shouldShowSentences: boolean;
   shouldShowTags: boolean;
   shouldShowLevel: boolean;
 };
