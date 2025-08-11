@@ -11,7 +11,7 @@ import { useChat } from "@ai-sdk/react";
 import LevelFilterDialog from "@/components/level-filter-dialog";
 import SettingsDialog from "@/components/settings-dialog";
 import { useAtom } from "jotai";
-import { settingsState } from "@/jotai/random-word/state";
+import { selectedTagsState, settingsState } from "@/jotai/random-word/state";
 // import { useCompletion } from "@ai-sdk/react";
 
 type Props = {
@@ -23,7 +23,7 @@ export default function RandomWordContainer({ tags }: Props) {
 
   const [words, setWords] = useState<Word[]>([]);
   const [settings, setSettings] = useAtom(settingsState);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useAtom(selectedTagsState);
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [isFetchingWord, setIsFetchingWord] = useState(false);
@@ -77,14 +77,13 @@ export default function RandomWordContainer({ tags }: Props) {
     }
   }, [words, isFinalWord, onClickNext]);
 
-  const onUpdateSelectedTags = (selectedTags: string[]) => {
-    setSelectedTags(selectedTags);
+  useEffect(() => {
     setCurrentIndex(-1);
     setIsFinalWord(false);
     setIsDetailHidden(false);
     setMessages([]);
     setWords([]);
-  };
+  }, [selectedTags, setMessages]);
 
   const onUpdateSelectedLevels = (selectedLevels: string[]) => {
     setSelectedLevels(selectedLevels);
@@ -132,7 +131,7 @@ export default function RandomWordContainer({ tags }: Props) {
         }`}
       >
         <div className="flex items-center justify-evenly w-full sm:w-auto sm:gap-x-2">
-          <TagFilterDialog tagOptions={tags} defaultSelectedTags={selectedTags} onUpdate={onUpdateSelectedTags} />
+          <TagFilterDialog tagOptions={tags} />
           <LevelFilterDialog defaultSelectedLevels={selectedLevels} onUpdate={onUpdateSelectedLevels} />
           <SettingsDialog />
         </div>
