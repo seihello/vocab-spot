@@ -45,8 +45,8 @@ export default function SettingsDialog() {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger className="rounded-full border size-16 flex justify-center items-center">
-        <IconSettings size={32} color="#666666" />
+      <DialogTrigger className="rounded-full border size-10 flex justify-center items-center">
+        <IconSettings size={20} color="#666666" />
       </DialogTrigger>
       <DialogContent>
         <DialogTitle className="hidden" />

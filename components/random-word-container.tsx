@@ -91,8 +91,13 @@ export default function RandomWordContainer({ tags }: Props) {
   const answers = messages.filter((message) => message.role === "assistant");
 
   return (
-    <div className="max-h-screen flex flex-col items-end justify-center w-full max-w-256 mx-auto pt-8 sm:px-8 min-h-dvh sm:min-h-auto">
-      <div className="w-full grow overflow-y-scroll px-2 space-y-2">
+    <div className="max-h-screen flex flex-col items-end justify-center w-full max-w-256 mx-auto pt-2 sm:px-8 min-h-dvh sm:min-h-auto">
+      <div className="flex items-center justify-evenly gap-x-2 sm:order-1 px-2">
+        <TagFilterDialog tagOptions={tags} />
+        <LevelFilterDialog />
+        <SettingsDialog />
+      </div>
+      <div className="w-full grow overflow-y-scroll px-2 space-y-2 sm:order-3">
         {isReady && <RandomWord word={words[currentIndex]} isDetailHidden={isDetailHidden} />}
         {answers.length > 0 && (
           <div className="w-full bg-green-50 p-2 sm:p-4 rounded-2xl text-sm sm:text-base">
@@ -115,16 +120,10 @@ export default function RandomWordContainer({ tags }: Props) {
       </div>
 
       <div
-        className={`w-full px-2 bg-white sm:w-auto flex flex-col sm:flex-row gap-2 sm:-order-1 items-end sm:items-center pt-4 shadow-[0px_0px_16px_6px_#EEEEEE] sm:shadow-none ${
-          isPwa ? "pb-16" : "pb-4"
+        className={`w-full px-2 bg-white sm:w-auto flex flex-col sm:flex-row gap-2 sm:order-2 items-end sm:items-center shadow-[0px_0px_16px_6px_#EEEEEE] sm:shadow-none pt-4 sm:pt-2 ${
+          isPwa ? "pb-16" : "pb-4 sm:pb-2"
         }`}
       >
-        <div className="flex items-center justify-evenly w-full sm:w-auto sm:gap-x-2">
-          <TagFilterDialog tagOptions={tags} />
-          <LevelFilterDialog />
-          <SettingsDialog />
-        </div>
-
         <Button variant="green" onClick={onClickShowAnswer} disabled={!isReady || !isDetailHidden}>
           Show Answer
         </Button>
