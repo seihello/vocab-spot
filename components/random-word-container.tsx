@@ -97,12 +97,16 @@ export default function RandomWordContainer({ tags }: Props) {
         {answers.length > 0 && (
           <div className="w-full bg-green-50 p-2 sm:p-4 rounded-2xl text-sm sm:text-base">
             {answers.map((answer) => (
-              <div key={answer.id}>
-                <span className="mr-1">💡</span>
+              <div key={answer.id} className="whitespace-pre-wrap">
                 {answer.parts
                   .filter((part) => part.type === "text")
                   .map((part, index) => (
-                    <span key={index}>{part.text}</span>
+                    <span
+                      key={index}
+                      dangerouslySetInnerHTML={{
+                        __html: part.text.replaceAll("\n", "<br />").replaceAll("**", ""),
+                      }}
+                    />
                   ))}
               </div>
             ))}
