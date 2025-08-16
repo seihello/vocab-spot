@@ -13,6 +13,7 @@ import { useAtom } from "jotai";
 import { selectedLevelsState, selectedTagsState } from "@/lib/jotai/random-word/state";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useAiExplanation } from "@/hooks/use-ai-explanation";
+import { useAiSentences } from "@/hooks/use-ai-sentences";
 
 type Props = {
   tags: string[];
@@ -31,7 +32,18 @@ export default function RandomWordContainer({ tags }: Props) {
 
   const { isLoading: isLoadingLocalStorage } = useLocalStorage();
 
-  const { messages, status, setMessages, run: generateExplanation } = useAiExplanation();
+  const {
+    messages: explanations,
+    status: explanationStatus,
+    setMessages: setExplanations,
+    run: generateExplanation,
+  } = useAiExplanation();
+  const {
+    messages: sentences,
+    status: sentenceStatus,
+    setMessages: setSentences,
+    run: generateSentences,
+  } = useAiSentences();
 
   const onClickShowAnswer = () => {
     setIsDetailHidden(false);
@@ -39,7 +51,8 @@ export default function RandomWordContainer({ tags }: Props) {
 
   const onClickPrev = () => {
     setIsDetailHidden(true);
-    setMessages([]);
+    setExplanations([]);
+    setSentences([]);
     setCurrentIndex((prev) => (prev > 0 ? prev - 1 : prev));
   };
 
@@ -47,7 +60,8 @@ export default function RandomWordContainer({ tags }: Props) {
     if (isFetchingWord) return;
     if (currentIndex + 1 < words.length) {
       setIsDetailHidden(true);
-      setMessages([]);
+      setExplanations([]);
+      setSentences([]);
       setCurrentIndex((prev) => prev + 1);
       return;
     }
@@ -63,14 +77,15 @@ export default function RandomWordContainer({ tags }: Props) {
     if (word) {
       setWords((prev) => [...prev, word]);
       setIsDetailHidden(true);
-      setMessages([]);
+      setExplanations([]);
+      setSentences([]);
       setCurrentIndex((prev) => prev + 1);
     } else {
       setIsFinalWord(true);
     }
 
     setIsFetchingWord(false);
-  }, [currentIndex, isFetchingWord, selectedTags, selectedLevels, words, setMessages]);
+  }, [currentIndex, isFetchingWord, selectedTags, selectedLevels, words, setExplanations, setSentences]);
 
   useEffect(() => {
     if (words.length === 0 && !isFinalWord && !isLoadingLocalStorage) {
@@ -82,13 +97,15 @@ export default function RandomWordContainer({ tags }: Props) {
     setCurrentIndex(-1);
     setIsFinalWord(false);
     setIsDetailHidden(false);
-    setMessages([]);
+    setExplanations([]);
+    setSentences([]);
     setWords([]);
-  }, [selectedTags, selectedLevels, setMessages]);
+  }, [selectedTags, selectedLevels, setExplanations, setSentences]);
 
   const isReady = words.length > 0 && currentIndex >= 0;
 
-  const answers = messages.filter((message) => message.role === "assistant");
+  const filteredExplanations = explanations.filter((explanation) => explanation.role === "assistant");
+  const filteredSentences = sentences.filter((sentence) => sentence.role === "assistant");
 
   return (
     <div className="max-h-screen flex flex-col items-end justify-center w-full max-w-256 mx-auto pt-2 sm:px-8 min-h-dvh sm:min-h-auto">
@@ -99,11 +116,29 @@ export default function RandomWordContainer({ tags }: Props) {
       </div>
       <div className="w-full grow overflow-y-scroll px-2 space-y-2 sm:order-3">
         {isReady && <RandomWord word={words[currentIndex]} isDetailHidden={isDetailHidden} />}
-        {answers.length > 0 && (
+        {filteredExplanations.length > 0 && (
           <div className="w-full bg-green-50 p-2 sm:p-4 rounded-2xl text-sm sm:text-base">
-            {answers.map((answer) => (
-              <div key={answer.id} className="whitespace-pre-wrap">
-                {answer.parts
+            {filteredExplanations.map((explanation) => (
+              <div key={explanation.id} className="whitespace-pre-wrap">
+                {explanation.parts
+                  .filter((part) => part.type === "text")
+                  .map((part, index) => (
+                    <span
+                      key={index}
+                      dangerouslySetInnerHTML={{
+                        __html: part.text.replaceAll("\n", "<br />").replaceAll("**", ""),
+                      }}
+                    />
+                  ))}
+              </div>
+            ))}
+          </div>
+        )}
+        {filteredSentences.length > 0 && (
+          <div className="w-full bg-yellow-50 p-2 sm:p-4 rounded-2xl text-sm sm:text-base">
+            {filteredSentences.map((sentence) => (
+              <div key={sentence.id} className="whitespace-pre-wrap">
+                {sentence.parts
                   .filter((part) => part.type === "text")
                   .map((part, index) => (
                     <span
@@ -130,9 +165,16 @@ export default function RandomWordContainer({ tags }: Props) {
         <Button
           variant="outline"
           onClick={() => generateExplanation(words[currentIndex].names)}
-          disabled={!isReady || status === "submitted" || status === "streaming"}
+          disabled={!isReady || explanationStatus === "submitted" || explanationStatus === "streaming"}
         >
           Explain Word
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => generateSentences(words[currentIndex].names)}
+          disabled={!isReady || sentenceStatus === "submitted" || sentenceStatus === "streaming"}
+        >
+          Make Sentence
         </Button>
         <div className="flex w-full sm:w-auto gap-x-2">
           <Button
