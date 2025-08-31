@@ -29,7 +29,6 @@ export default function RandomWordContainer({ tags }: Props) {
   const [wordCount, setWordCount] = useState(-1);
   const [isFetchingWord, setIsFetchingWord] = useState(false);
   const [isDetailHidden, setIsDetailHidden] = useState(true);
-  const [isFinalWord, setIsFinalWord] = useState(false);
 
   const { isLoading: isLoadingLocalStorage } = useLocalStorage();
 
@@ -82,22 +81,19 @@ export default function RandomWordContainer({ tags }: Props) {
       setExplanations([]);
       setSentences([]);
       setCurrentIndex((prev) => prev + 1);
-    } else {
-      setIsFinalWord(true);
     }
 
     setIsFetchingWord(false);
   }, [currentIndex, isFetchingWord, selectedTags, selectedLevels, words, setExplanations, setSentences]);
 
   useEffect(() => {
-    if (words.length === 0 && !isFinalWord && !isLoadingLocalStorage) {
+    if (words.length === 0 && !isLoadingLocalStorage) {
       onClickNext();
     }
-  }, [words, isFinalWord, isLoadingLocalStorage, onClickNext]);
+  }, [words, isLoadingLocalStorage, onClickNext]);
 
   useEffect(() => {
     setCurrentIndex(-1);
-    setIsFinalWord(false);
     setIsDetailHidden(false);
     setExplanations([]);
     setSentences([]);
@@ -197,7 +193,7 @@ export default function RandomWordContainer({ tags }: Props) {
             disabled={
               !isReady ||
               isFetchingWord ||
-              (currentIndex === words.length - 1 && isFinalWord) ||
+              currentIndex === wordCount - 1 ||
               status === "submitted" ||
               status === "streaming"
             }
