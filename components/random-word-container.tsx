@@ -26,6 +26,7 @@ export default function RandomWordContainer({ tags }: Props) {
   const [selectedTags] = useAtom(selectedTagsState);
   const [selectedLevels] = useAtom(selectedLevelsState);
   const [currentIndex, setCurrentIndex] = useState(-1);
+  const [wordCount, setWordCount] = useState(-1);
   const [isFetchingWord, setIsFetchingWord] = useState(false);
   const [isDetailHidden, setIsDetailHidden] = useState(true);
   const [isFinalWord, setIsFinalWord] = useState(false);
@@ -68,7 +69,7 @@ export default function RandomWordContainer({ tags }: Props) {
 
     setIsFetchingWord(true);
 
-    const word = await getRandomWord({
+    const { word, count } = await getRandomWord({
       tags: selectedTags,
       excludeIds: words.map((word) => word.id),
       levels: selectedLevels,
@@ -76,6 +77,7 @@ export default function RandomWordContainer({ tags }: Props) {
 
     if (word) {
       setWords((prev) => [...prev, word]);
+      setWordCount(count);
       setIsDetailHidden(true);
       setExplanations([]);
       setSentences([]);
@@ -100,6 +102,7 @@ export default function RandomWordContainer({ tags }: Props) {
     setExplanations([]);
     setSentences([]);
     setWords([]);
+    setWordCount(-1);
   }, [selectedTags, selectedLevels, setExplanations, setSentences]);
 
   const isReady = words.length > 0 && currentIndex >= 0;
@@ -110,6 +113,11 @@ export default function RandomWordContainer({ tags }: Props) {
   return (
     <div className="max-h-screen flex flex-col items-end justify-center w-full max-w-256 mx-auto pt-2 sm:px-8 min-h-dvh sm:min-h-auto">
       <div className="flex items-center justify-evenly gap-x-2 sm:order-1 px-2">
+        {wordCount >= 0 && (
+          <div className="text-gray-500">
+            {currentIndex + 1} / {wordCount}
+          </div>
+        )}
         <TagFilterDialog tagOptions={tags} />
         <LevelFilterDialog />
         <SettingsDialog />
