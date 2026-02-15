@@ -2,8 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import addWords from "@/lib/firebase/add-words";
-import { Word } from "@/lib/types";
+import { syncWords } from "@/lib/firebase/sync-words";
+import { Word } from "@/lib/notion/get-words";
 import { validatePasscode } from "@/lib/validate-passcode";
 import { useEffect, useState } from "react";
 
@@ -26,10 +26,19 @@ export default function Home() {
   return (
     <div className="max-w-4xl w-full p-4 mx-auto space-y-4 flex flex-col items-center sm:items-start">
       <h1 className="text-2xl font-bold">Admin Page</h1>
-      <Input type="password" placeholder="Enter passcode" onChange={(e) => setPasscode(e.target.value)} />
+      {!isPasscodePassed && (
+        <Input type="password" placeholder="Enter passcode" onChange={(e) => setPasscode(e.target.value)} />
+      )}
       {isPasscodePassed && (
         <div className="fade-in flex gap-x-2 w-full">
-          <Button onClick={async () => await addWords()}>Add word test</Button>
+          <Button
+            onClick={async (e) => {
+              e.preventDefault();
+              await syncWords();
+            }}
+          >
+            Add word test
+          </Button>
         </div>
       )}
       <div className="space-y-4">
