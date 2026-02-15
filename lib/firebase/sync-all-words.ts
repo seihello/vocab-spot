@@ -1,6 +1,6 @@
 "use server";
 
-import { firestore } from "@/lib/firebase/client";
+import { db } from "@/lib/firebase/db";
 import { getWords } from "@/lib/notion/get-words";
 import { doc, setDoc } from "firebase/firestore";
 
@@ -20,7 +20,7 @@ export async function syncAllWords() {
       console.log("count", count);
       count += 1;
 
-      const docRef = doc(firestore, "words", word.id);
+      const docRef = doc(db, "words", word.id);
       await setDoc(docRef, {
         names: word.names,
         meanings: word.meanings,

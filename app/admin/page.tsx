@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { getAllWordsMinimal } from "@/lib/firebase/get-all-words-minimal";
+import { getWordSummaries } from "@/lib/firebase/get-word-summaries";
 import { syncAllWords } from "@/lib/firebase/sync-all-words";
 import { Word } from "@/lib/notion/get-words";
 import { validatePasscode } from "@/lib/validate-passcode";
@@ -44,7 +44,7 @@ export default function Home() {
           <Button
             onClick={async (e) => {
               e.preventDefault();
-              await getAllWordsMinimal();
+              await getWordSummaries();
             }}
           >
             Test

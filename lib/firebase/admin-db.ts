@@ -13,4 +13,4 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
-export { db as firestore };
+export { db as adminDb };
