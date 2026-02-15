@@ -38,16 +38,17 @@ export default function Home() {
               await syncAllWords();
             }}
           >
-            Add word test
+            Add All Words
           </Button>
 
           <Button
             onClick={async (e) => {
               e.preventDefault();
-              await getWordSummaries();
+              const wordSummaries = await getWordSummaries();
+              console.log("wordSummaries", wordSummaries);
             }}
           >
-            Test
+            Fetch Word Summaries
           </Button>
         </div>
       )}

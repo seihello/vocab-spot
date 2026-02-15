@@ -1,3 +1,9 @@
+export type WordSummary = {
+  id: string;
+  level: number;
+  tags: string[];
+};
+
 export type Word = {
   id: string;
   names: string;
@@ -5,8 +11,9 @@ export type Word = {
   sentences: string;
   collocations: string;
   pronunciations: string;
+  synonyms: string;
   level: number;
-  tags: string[]; // 配列にする
+  tags: string[];
 };
 
 export type Settings = {
