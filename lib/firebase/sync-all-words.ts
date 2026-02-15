@@ -4,7 +4,7 @@ import { firestore } from "@/lib/firebase/get-client";
 import { getWords } from "@/lib/notion/get-words";
 import { doc, setDoc } from "firebase/firestore";
 
-export async function syncWords() {
+export async function syncAllWords() {
   try {
     // const docRef = await addDoc(collection(firestore, "words"), {
     //   title: "test title 1",

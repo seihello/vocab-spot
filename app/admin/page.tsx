@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { syncWords } from "@/lib/firebase/sync-words";
+import { syncAllWords } from "@/lib/firebase/sync-all-words";
 import { Word } from "@/lib/notion/get-words";
 import { validatePasscode } from "@/lib/validate-passcode";
 import { useEffect, useState } from "react";
@@ -34,7 +34,7 @@ export default function Home() {
           <Button
             onClick={async (e) => {
               e.preventDefault();
-              await syncWords();
+              await syncAllWords();
             }}
           >
             Add word test
