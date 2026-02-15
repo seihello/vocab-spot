@@ -1,6 +1,6 @@
 "use server";
 
-import { firestore } from "@/lib/firebase/get-client";
+import { firestore } from "@/lib/firebase/client";
 import { getWords } from "@/lib/notion/get-words";
 import { doc, setDoc } from "firebase/firestore";
 

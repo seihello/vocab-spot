@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getAllWordsMinimal } from "@/lib/firebase/get-all-words-minimal";
 import { syncAllWords } from "@/lib/firebase/sync-all-words";
 import { Word } from "@/lib/notion/get-words";
 import { validatePasscode } from "@/lib/validate-passcode";
@@ -9,7 +10,7 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const [passcode, setPasscode] = useState("");
-  const [isPasscodePassed, setIsPasscodePassed] = useState(false);
+  const [isPasscodePassed, setIsPasscodePassed] = useState(/*false*/ true);
   const [words, setWords] = useState<Word[]>([]);
 
   useEffect(() => {
@@ -26,9 +27,9 @@ export default function Home() {
   return (
     <div className="max-w-4xl w-full p-4 mx-auto space-y-4 flex flex-col items-center sm:items-start">
       <h1 className="text-2xl font-bold">Admin Page</h1>
-      {!isPasscodePassed && (
+      {/* {!isPasscodePassed && (
         <Input type="password" placeholder="Enter passcode" onChange={(e) => setPasscode(e.target.value)} />
-      )}
+      )} */}
       {isPasscodePassed && (
         <div className="fade-in flex gap-x-2 w-full">
           <Button
@@ -38,6 +39,15 @@ export default function Home() {
             }}
           >
             Add word test
+          </Button>
+
+          <Button
+            onClick={async (e) => {
+              e.preventDefault();
+              await getAllWordsMinimal();
+            }}
+          >
+            Test
           </Button>
         </div>
       )}
