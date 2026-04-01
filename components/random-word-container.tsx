@@ -4,9 +4,8 @@ import TagFilterDialog from "@/components/tag-filter-dialog";
 import { Button } from "@/components/ui/button";
 import RandomWord from "@/components/random-word";
 import { useDisplayMode } from "@/hooks/use-display-mode";
-import { getRandomWord } from "@/lib/csv/get-random-word";
-import { Word } from "@/lib/types";
-import React, { useCallback, useEffect, useState } from "react";
+import { SearchOptions, Word, WordSummary } from "@/lib/types";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import LevelFilterDialog from "@/components/level-filter-dialog";
 import SettingsDialog from "@/components/settings-dialog";
 import { useAtom } from "jotai";
@@ -14,12 +13,13 @@ import { selectedLevelsState, selectedTagsState } from "@/lib/jotai/random-word/
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useAiExplanation } from "@/hooks/use-ai-explanation";
 import { useAiSentences } from "@/hooks/use-ai-sentences";
+import { getWordById } from "@/lib/firebase/get-word-by-id";
 
 type Props = {
-  tags: string[];
+  wordSummaries: WordSummary[];
 };
 
-export default function RandomWordContainer({ tags }: Props) {
+export default function RandomWordContainer({ wordSummaries }: Props) {
   const { isPwa } = useDisplayMode();
 
   const [words, setWords] = useState<Word[]>([]);
@@ -32,12 +32,19 @@ export default function RandomWordContainer({ tags }: Props) {
 
   const { isLoading: isLoadingLocalStorage } = useLocalStorage();
 
+  const tagOptions = useMemo(() => {
+    const tags = new Set<string>();
+    wordSummaries.forEach((wordSummary) => wordSummary.tags.forEach((tag) => tags.add(tag)));
+    return Array.from(tags);
+  }, [wordSummaries]);
+
   const {
     messages: explanations,
     status: explanationStatus,
     setMessages: setExplanations,
     run: generateExplanation,
   } = useAiExplanation();
+
   const {
     messages: sentences,
     status: sentenceStatus,
@@ -68,7 +75,7 @@ export default function RandomWordContainer({ tags }: Props) {
 
     setIsFetchingWord(true);
 
-    const { word, count } = await getRandomWord({
+    const { word, count } = await getRandomWord(wordSummaries, {
       tags: selectedTags,
       excludeIds: words.map((word) => word.id),
       levels: selectedLevels,
@@ -114,7 +121,7 @@ export default function RandomWordContainer({ tags }: Props) {
             {currentIndex + 1} / {wordCount}
           </div>
         )}
-        <TagFilterDialog tagOptions={tags} />
+        <TagFilterDialog tagOptions={tagOptions} />
         <LevelFilterDialog />
         <SettingsDialog />
       </div>
@@ -205,4 +212,35 @@ export default function RandomWordContainer({ tags }: Props) {
       </div>
     </div>
   );
+}
+
+export async function getRandomWord(
+  wordSummaries: WordSummary[],
+  options: SearchOptions,
+): Promise<{ word: Word | null; count: number }> {
+  const filteredWords = wordSummaries.filter((wordSummary) => matchCondition(wordSummary, options));
+
+  const remainingWords = filteredWords.filter((word) => !(options.excludeIds ?? []).includes(word.id));
+
+  if (remainingWords.length === 0) {
+    return { word: null, count: 0 };
+  }
+
+  const randomIndex = Math.floor(Math.random() * remainingWords.length);
+  const nextWordSummary = remainingWords[randomIndex];
+
+  const word = await getWordById(nextWordSummary.id);
+
+  return { word: word, count: filteredWords.length };
+}
+
+function matchCondition(wordSummary: WordSummary, options: SearchOptions): boolean {
+  if (options.tags && options.tags.length > 0 && !wordSummary.tags.some((tag) => options.tags?.includes(tag))) {
+    return false;
+  }
+  if (options.levels && options.levels.length > 0 && !options.levels.includes(wordSummary.level.toString())) {
+    return false;
+  }
+
+  return true;
 }

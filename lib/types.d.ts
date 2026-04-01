@@ -16,6 +16,8 @@ export type Word = {
   tags: string[];
 };
 
+export type SearchOptions = { excludeIds?: string[]; tags?: string[]; levels?: string[] };
+
 export type Settings = {
   shouldShowMeanings: boolean;
   shouldShowSentences: boolean;
